@@ -2,7 +2,7 @@
 
 import inspect
 
-from .modules import BaseToolResultModule
+from .tool_modules import BaseToolResultModule
 
 
 def get_result_module(module):
