@@ -76,3 +76,9 @@ For a single module (ex. Kraken):
 ```sh
 $ python -m pytest --color=yes modules/kraken -s
 ```
+
+## Acknowledgments
+
+Thanks to Christian Hettlage for his post on [setting up a pypi server](https://medium.com/@christianhettlage/setting-up-a-pypi-server-679f1b55b96).
+
+Thanks to Jorge Herrera at Shazam for a [great writeup on Python microlibs](https://blog.shazam.com/python-microlibs-5be9461ad979).
