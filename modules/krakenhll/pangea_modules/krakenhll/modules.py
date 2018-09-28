@@ -11,12 +11,12 @@ class KrakenHLLResultModule(SampleToolResultModule):
 
     @classmethod
     def name(cls):
-        """Return Kraken module's unique identifier string."""
+        """Return KrakenHLL module's unique identifier string."""
         return MODULE_NAME
 
     @classmethod
     def result_model(cls):
-        """Return Kraken module's model class."""
+        """Return KrakenHLL module's model class."""
         return KrakenHLLResult
 
     @classmethod
