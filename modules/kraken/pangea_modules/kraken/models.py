@@ -2,7 +2,7 @@
 
 from mongoengine import MapField, IntField
 
-from pangea_modules.base.models import ToolResult
+from pangea_modules.base import ToolResult
 
 
 class KrakenResult(ToolResult):     # pylint: disable=too-few-public-methods
