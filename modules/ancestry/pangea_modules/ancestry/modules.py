@@ -1,7 +1,7 @@
 """Module for Ancestry results."""
 
-from analysis_packages.base import AnalysisModule
-from analysis_packages.ancestry_data import AncestryResultModule
+from pangea_modules.base import AnalysisModule
+from pangea_modules.ancestry_data import AncestryResultModule
 
 from .analysis import processor
 from .constants import MODULE_NAME
