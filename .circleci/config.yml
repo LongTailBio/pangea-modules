@@ -45,9 +45,21 @@ jobs:
     environment:
       MODULE_NAME: base
 
+  test_humann2:
+    <<: *default_test
+    environment:
+      MODULE_NAME: humann2
+
+  test_krakenhll:
+    <<: *default_test
+    environment:
+      MODULE_NAME: krakenhll
+
 workflows:
   version: 2
 
   base_cd:
     jobs:
       - test_base
+      - test_humann2
+      - test_krakenhll
