@@ -6,7 +6,6 @@ default_lint: &default_lint
     - image: circleci/python:3.6
   steps:
     - checkout
-    - run: cd modules/$MODULE_NAME
     - restore_cache:
         keys:
           - v1-dependencies-{{ .Environment.MODULE_NAME }}-{{ checksum "requirements.txt" }}
@@ -17,6 +16,7 @@ default_lint: &default_lint
         command: |
           python3 -m venv venv
           . venv/bin/activate
+          cd modules/$MODULE_NAME
           pip install -r requirements.txt
     - save_cache:
         paths:
@@ -25,6 +25,7 @@ default_lint: &default_lint
     - run:
         name: Lint module
         command: |
+          pwd
           . venv/bin/activate
           pylint pangea_modules/$MODULE_NAME
 
