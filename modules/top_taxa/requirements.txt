@@ -1,5 +1,7 @@
 --index-url https://pypi.python.org/simple
 
+../base/
 ../krakenhll_data/
+../metaphlan2_data/
 
 -e .

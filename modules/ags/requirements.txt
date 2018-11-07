@@ -1,5 +1,6 @@
 --index-url https://pypi.python.org/simple
 
-../krakenhll_data/
+../base/
+../microbe_census_data/
 
 -e .
