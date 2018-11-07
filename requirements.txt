@@ -1,2 +1,3 @@
-wheel
-twine
+pylint==2.1.1
+wheel==0.31.1
+twine==1.12.1
