@@ -12,6 +12,11 @@ default_test: &default_test
   steps:
     - checkout
 
+    - run:
+        name: Print help for circleci step halt command
+        command: |
+          circleci step halt --help
+
     - restore_cache:
         keys:
           - v1-dependencies-{{ .Environment.MODULE_NAME }}-{{ checksum "requirements.txt" }}
