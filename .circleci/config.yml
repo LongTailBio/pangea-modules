@@ -1,16 +1,23 @@
 version: 2
 
 # Common step for adding Longtail PyPI index
-default_lint: &default_lint
+default_test: &default_test
   docker:
     - image: circleci/python:3.6
+
+  # CircleCI does not allow expansion of the path so we'll have to `cd`
+  # into the correct submodule directory for each `run` step
+  working_directory: ~/project
+
   steps:
     - checkout
+
     - restore_cache:
         keys:
           - v1-dependencies-{{ .Environment.MODULE_NAME }}-{{ checksum "requirements.txt" }}
           - v1-dependencies-{{ .Environment.MODULE_NAME }}
           - v1-dependencies-
+
     - run:
         name: Install Python Dependencies
         command: |
@@ -18,20 +25,23 @@ default_lint: &default_lint
           . venv/bin/activate
           cd modules/$MODULE_NAME
           pip install -r requirements.txt
+
     - save_cache:
         paths:
           - ./venv
         key: v1-dependencies-{{ .Environment.MODULE_NAME }}-{{ checksum "requirements.txt" }}
+
     - run:
         name: Lint module
         command: |
           . venv/bin/activate
-          pylint modules/pangea_modules/$MODULE_NAME
+          cd modules/$MODULE_NAME
+          pylint pangea_modules/$MODULE_NAME
 
 # CircleCI Jobs
 jobs:
-  lint_base:
-    <<: *default_lint
+  test_base:
+    <<: *default_test
     environment:
       MODULE_NAME: base
 
@@ -40,4 +50,4 @@ workflows:
 
   base_cd:
     jobs:
-      - lint_base
+      - test_base
