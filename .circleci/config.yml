@@ -87,7 +87,13 @@ default_test: &default_test
         command: |
           . venv/bin/activate
           cd modules/$MODULE_NAME
-          pylint pangea_modules/$MODULE_NAME
+          pylint pangea_modules/$MODULE_NAME tests
+
+    - run:
+        name: Run tests
+        command: |
+          . venv/bin/activate
+          python -m pytest --color=yes modules/$MODULE_NAME -s
 
 
 # Common step for adding Longtail PyPI index
