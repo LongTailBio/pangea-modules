@@ -1,3 +1,5 @@
 --index-url https://pypi.python.org/simple
 
+pylint==2.1.1
+
 -e .
