@@ -157,25 +157,25 @@ jobs:
     environment:
       MODULE_NAME: base
 
-  test_humann2:
+  test_metaphlan2_data:
     <<: *default_test
     environment:
-      MODULE_NAME: humann2
+      MODULE_NAME: metaphlan2_data
 
-  publish_humann2:
+  publish_metaphlan2_data:
     <<: *default_publish
     environment:
-      MODULE_NAME: humann2
+      MODULE_NAME: metaphlan2_data
 
-  test_krakenhll:
+  test_krakenhll_data:
     <<: *default_test
     environment:
-      MODULE_NAME: krakenhll
+      MODULE_NAME: krakenhll_data
 
-  publish_krakenhll:
+  publish_krakenhll_data:
     <<: *default_publish
     environment:
-      MODULE_NAME: krakenhll
+      MODULE_NAME: krakenhll_data
 
 workflows:
   version: 2
@@ -191,20 +191,20 @@ workflows:
           requires:
             - test_base
 
-      - test_humann2
-      - publish_humann2:
+      - test_metaphlan2_data
+      - publish_metaphlan2_data:
           context: longtail-pypi
           filters:
             branches:
               only: master
           requires:
-            - test_humann2
+            - test_metaphlan2_data
 
-      - test_krakenhll
-      - publish_krakenhll:
+      - test_krakenhll_data
+      - publish_krakenhll_data:
           context: longtail-pypi
           filters:
             branches:
               only: master
           requires:
-            - test_krakenhll
+            - test_krakenhll_data
