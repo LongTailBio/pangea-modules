@@ -26,10 +26,10 @@ password: topsecret
 
 ### Build and Publish Module
 
-Ex. Kraken
+Ex. KrakenHLL
 
 ```sh
-$ cd modules/kraken/
+$ cd modules/krakenhll/
 $ python setup.py bdist_wheel --universal
 $ python setup.py bdist_wheel upload -r longtailbio
 ```
@@ -39,7 +39,7 @@ $ python setup.py bdist_wheel upload -r longtailbio
 **Option 1:**
 
 ```sh
-$ pip install -i https://pypi.longtailbio.com/simple pangea_modules.kraken
+$ pip install -i https://pypi.longtailbio.com/simple pangea_modules.krakenhll
 ```
 
 **Option 2:**
@@ -54,7 +54,7 @@ extra-index-url = https://pypi.longtailbio.com/simple/
 Then call pip without the `-i` option:
 
 ```sh
-$ pip install pangea_modules.kraken
+$ pip install pangea_modules.krakenhll
 ```
 
 ## Testing
@@ -71,10 +71,10 @@ To run all tests:
 $ python -m pytest --color=yes modules -s
 ```
 
-For a single module (ex. Kraken):
+For a single module (ex. KrakenHLL):
 
 ```sh
-$ python -m pytest --color=yes modules/kraken -s
+$ python -m pytest --color=yes modules/krakenhll -s
 ```
 
 ## Acknowledgments
