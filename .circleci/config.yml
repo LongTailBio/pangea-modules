@@ -25,9 +25,8 @@ default_lint: &default_lint
     - run:
         name: Lint module
         command: |
-          pwd
           . venv/bin/activate
-          pylint pangea_modules/$MODULE_NAME
+          pylint modules/pangea_modules/$MODULE_NAME
 
 # CircleCI Jobs
 jobs:
