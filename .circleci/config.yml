@@ -1,5 +1,12 @@
 version: 2
 
+run: &abort_if_no_change
+  name: Abort if no changes
+  command: |
+    if [ $(git diff develop modules/$MODULE_NAME | wc -l) -gt 0 ] ; then
+      circleci step halt
+    fi
+
 # Common step for adding Longtail PyPI index
 default_test: &default_test
   docker:
@@ -12,10 +19,7 @@ default_test: &default_test
   steps:
     - checkout
 
-    - run:
-        name: Print help for circleci step halt command
-        command: |
-          circleci step halt --help
+    - run: *abort_if_no_change
 
     - restore_cache:
         keys:
