@@ -13,7 +13,7 @@ run: &abort_if_no_change
     WORD_COUNT=$(git diff develop modules/$MODULE_NAME | wc -l)
     echo "$WORD_COUNT"
 
-    if [ $WORD_COUNT -gt 0 ] ; then
+    if [ $WORD_COUNT -eq 0 ] ; then
       circleci step halt
     fi
 
@@ -33,8 +33,9 @@ default_test: &default_test
 
     - restore_cache:
         keys:
-          - v1-dependencies-{{ .Environment.MODULE_NAME }}-{{ checksum "requirements.txt" }}
-          - v1-dependencies-{{ .Environment.MODULE_NAME }}
+          # We do not use the {{ .Environment.MODULE_NAME }} helper because only
+          # variables from CircleCI or a context are supported
+          - v1-dependencies-{{ checksum "requirements.txt" }}
           - v1-dependencies-
 
     - run:
@@ -48,7 +49,7 @@ default_test: &default_test
     - save_cache:
         paths:
           - ./venv
-        key: v1-dependencies-{{ .Environment.MODULE_NAME }}-{{ checksum "requirements.txt" }}
+        key: v1-dependencies-{{ checksum "requirements.txt" }}
 
     - run:
         name: Lint module
