@@ -24,14 +24,17 @@ pypi_step: &pypi_step
 abort_if_no_change: &abort_if_no_change
   name: Abort if no changes
   command: |
+    # Build every module for tagged releases
+    if [ -n "$CIRCLE_TAG" ] ; then exit 0; fi
+
     if [ $CIRCLE_BRANCH = "master" ] || [ $CIRCLE_BRANCH = "develop" ] ; then
-      WORD_COUNT=$(git diff HEAD@{1} modules/$MODULE_NAME | wc -l)
+      WORD_COUNT=$(git diff --name-only HEAD@{1} modules/$MODULE_NAME | wc -l)
     elif [[ $CIRCLE_BRANCH ==  feature/* ]] ; then
       git fetch origin develop:develop
-      WORD_COUNT=$(git diff develop modules/$MODULE_NAME | wc -l)
-    elif [[ $CIRCLE_BRANCH ==  hotfix/* ]] ; then
+      WORD_COUNT=$(git diff --name-only develop modules/$MODULE_NAME | wc -l)
+    elif [[ $CIRCLE_BRANCH ==  hotfix/* ]] || [[ $CIRCLE_BRANCH ==  release/* ]] ; then
       git fetch origin master:master
-      WORD_COUNT=$(git diff master modules/$MODULE_NAME | wc -l)
+      WORD_COUNT=$(git diff --name-only master modules/$MODULE_NAME | wc -l)
     else
       echo "Invalid branch name pattern!"
       exit 1
@@ -263,8 +266,10 @@ jobs:
 publish_tpl: &publish_tpl
   context: longtail-pypi
   filters:
+    tags:
+      only: /^v.*/
     branches:
-      only: master
+      ignore: /.*/
 
 workflows:
   version: 2
