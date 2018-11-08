@@ -24,8 +24,6 @@ pypi_step: &pypi_step
 abort_if_no_change: &abort_if_no_change
   name: Abort if no changes
   command: |
-    set +x
-
     if [ $CIRCLE_BRANCH = "master" ] || [ $CIRCLE_BRANCH = "develop" ] ; then
       WORD_COUNT=$(git diff HEAD@{1} modules/$MODULE_NAME | wc -l)
     elif [[ $CIRCLE_BRANCH ==  feature/* ]] ; then
@@ -92,8 +90,17 @@ default_test: &default_test
     - run:
         name: Run tests
         command: |
+          set +e
           . venv/bin/activate
           python -m pytest --color=yes modules/$MODULE_NAME -s
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 5 ] ; then
+            # https://docs.pytest.org/en/latest/usage.html#possible-exit-codes
+            echo "Squashing pytest's non-zero exit code for 'no tests run'."
+            exit 0
+          else
+            exit $EXIT_CODE
+          fi
 
 
 # Common step for adding Longtail PyPI index
