@@ -263,6 +263,11 @@ jobs:
       MODULE_NAME: top_taxa
 
 
+test_tpl: &test_tpl
+  filters:
+    tags:
+      only: /^v.*/
+
 publish_tpl: &publish_tpl
   context: longtail-pypi
   filters:
@@ -277,55 +282,64 @@ workflows:
   # Run parallel pipelines for each tool, skipping if there are no changes
   base_cd:
     jobs:
-      - test_ags
+      - test_ags:
+          <<: *test_tpl
       - publish_ags:
           <<: *publish_tpl
           requires:
             - test_ags
 
-      - test_ancestry
+      - test_ancestry:
+          <<: *test_tpl
       - publish_ancestry:
           <<: *publish_tpl
           requires:
             - test_ancestry
 
-      - test_ancestry_data
+      - test_ancestry_data:
+          <<: *test_tpl
       - publish_ancestry_data:
           <<: *publish_tpl
           requires:
             - test_ancestry_data
 
-      - test_base
+      - test_base:
+          <<: *test_tpl
       - publish_base:
           <<: *publish_tpl
           requires:
             - test_base
 
-      - test_krakenhll_data
+      - test_krakenhll_data:
+          <<: *test_tpl
       - publish_krakenhll_data:
           <<: *publish_tpl
           requires:
             - test_krakenhll_data
 
-      - test_metaphlan2_data
+      - test_metaphlan2_data:
+          <<: *test_tpl
       - publish_metaphlan2_data:
           <<: *publish_tpl
           requires:
             - test_metaphlan2_data
 
-      - test_microbe_census_data
+      - test_microbe_census_data:
+          <<: *test_tpl
       - publish_microbe_census_data:
           <<: *publish_tpl
           requires:
             - test_microbe_census_data
 
-      - test_sample_similarity
+      - test_sample_similarity:
+          <<: *test_tpl
       - publish_sample_similarity:
           <<: *publish_tpl
           requires:
             - test_sample_similarity
 
-      - test_top_taxa
+      - test_top_taxa:
+          <<: *test_tpl
       - publish_top_taxa:
           <<: *publish_tpl
           requires:
