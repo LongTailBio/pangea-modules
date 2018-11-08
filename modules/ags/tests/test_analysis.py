@@ -1,17 +1,9 @@
 """Test suite for Average Genome Size analysis."""
 
-import os
 from unittest import TestCase
 
 from pangea_modules.ags.analysis import ags_distributions
-from pangea_modules.base.utils import relative_import
-
-
-model_factory = relative_import(  # pylint: disable=invalid-name
-    'microbe_census_data.factory',
-    os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                 '../../microbe_census_data/tests/factory.py')
-)
+from pangea_modules.microbe_census_data.factory import create_values
 
 
 class TestAverageGenomeSizeTasks(TestCase):
@@ -26,7 +18,7 @@ class TestAverageGenomeSizeTasks(TestCase):
             sample = {
                 'name': f'SMPL_{i}',
                 'metadata': metadata,
-                'microbe_census': model_factory.create_values(),
+                'microbe_census': create_values(),
             }
             return sample
 

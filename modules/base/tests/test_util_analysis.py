@@ -3,8 +3,6 @@
 import os
 from unittest import TestCase
 
-from pangea_modules.krakenhll_data import KrakenHLLResultModule
-
 from pangea_modules.base.utils import (
     categories_from_metadata,
     collate_samples,
@@ -12,14 +10,26 @@ from pangea_modules.base.utils import (
 )
 
 
-model_factory = relative_import(  # pylint: disable=invalid-name
-    'krakenhll_data.factory',
-    os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                 '../../krakenhll_data/tests/factory.py')
+# Base should not depend on anything; import via file as a workaround
+krakenhll_data = relative_import(  # pylint: disable=invalid-name
+    'pangea_modules.krakenhll_data',
+    os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        '../../krakenhll_data/pangea_modules/krakenhll_data/__init__.py'
+    )
 )
 
 
-KRAKEN_NAME = KrakenHLLResultModule.name()
+krakenhll_factory = relative_import(  # pylint: disable=invalid-name
+    'pangea_modules.krakenhll_data.factory',
+    os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        '../../krakenhll_data/pangea_modules/krakenhll_data/factory.py'
+    )
+)
+
+
+KRAKEN_NAME = krakenhll_data.KrakenHLLResultModule.name()
 
 
 class TestDisplayModuleUtilityTasks(TestCase):
@@ -47,11 +57,11 @@ class TestDisplayModuleUtilityTasks(TestCase):
         """Ensure collate_samples task works."""
         sample1 = {
             'name': 'Sample01',
-            KRAKEN_NAME: model_factory.create_result(save=False),
+            KRAKEN_NAME: krakenhll_factory.create_result(save=False),
         }
         sample2 = {
             'name': 'Sample02',
-            KRAKEN_NAME: model_factory.create_result(save=False),
+            KRAKEN_NAME: krakenhll_factory.create_result(save=False),
         }
         samples = [sample1, sample2]
         result = collate_samples(KRAKEN_NAME, ['taxa'], samples)

@@ -5,7 +5,7 @@ from unittest import TestCase
 from mongoengine import ValidationError
 
 from pangea_modules.sample_similarity.models import SampleSimilarityResult
-from .factory import CATEGORIES, TOOLS, DATA_RECORDS
+from pangea_modules.sample_similarity.factory import CATEGORIES, TOOLS, DATA_RECORDS
 
 
 class TestSampleSimilarityModels(TestCase):
