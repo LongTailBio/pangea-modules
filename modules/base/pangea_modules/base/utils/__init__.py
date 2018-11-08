@@ -9,6 +9,14 @@ from numpy import percentile
 from ..modules import AnalysisModule
 
 
+def relative_import(name, path):
+    """Import a module from a path."""
+    spec = importlib.util.spec_from_file_location(name, path)
+    tmp_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tmp_module)
+    return tmp_module
+
+
 def get_primary_module(package):
     """Extract AnalysisModule primary module from package."""
     def test_submodule(submodule):

@@ -4,7 +4,7 @@
 
 import factory
 
-from pangea_modules.base.factory_utils import create_taxa_values
+from pangea_modules.base.utils.factory import create_taxa_values
 from pangea_modules.metaphlan2_data.models import Metaphlan2Result
 
 
