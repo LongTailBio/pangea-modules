@@ -12,7 +12,7 @@ from pangea_modules.base.utils import relative_import
 
 
 factory = relative_import(  # pylint: disable=invalid-name
-    'factory',
+    'ancestry_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../ancestry_data/tests/factory.py')
 )

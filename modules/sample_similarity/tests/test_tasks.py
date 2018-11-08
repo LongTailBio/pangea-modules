@@ -16,7 +16,7 @@ from pangea_modules.sample_similarity.analysis import (
 
 
 factory = relative_import(  # pylint: disable=invalid-name
-    'factory',
+    'krakenhll_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../krakenhll_data/tests/factory.py')
 )

@@ -14,14 +14,14 @@ from pangea_modules.top_taxa.models import TopTaxaResult
 
 
 krakenhll_factory = relative_import(  # pylint: disable=invalid-name
-    'krakenhll_factory',
+    'krakenhll_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../krakenhll_data/tests/factory.py')
 )
 
 
 metaphlan2_factory = relative_import(  # pylint: disable=invalid-name
-    'metaphlan2_factory',
+    'metaphlan2_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../metaphlan2_data/tests/factory.py')
 )

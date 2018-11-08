@@ -8,7 +8,7 @@ from pangea_modules.base.utils import relative_import
 
 
 factory = relative_import(  # pylint: disable=invalid-name
-    'factory',
+    'microbe_census_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../microbe_census_data/tests/factory.py')
 )
