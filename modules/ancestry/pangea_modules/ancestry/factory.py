@@ -6,7 +6,7 @@ import factory
 from pandas import DataFrame
 
 from pangea_modules.ancestry.models import AncestryResult
-from pangea_modules.ancestry.factory import create_values
+from pangea_modules.ancestry_data.factory import create_values
 
 
 def create_result():
