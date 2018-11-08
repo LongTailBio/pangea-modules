@@ -30,10 +30,10 @@ abort_if_no_change: &abort_if_no_change
     if [ $CIRCLE_BRANCH = "master" ] || [ $CIRCLE_BRANCH = "develop" ] ; then
       WORD_COUNT=$(git diff --name-only HEAD@{1} modules/$MODULE_NAME | wc -l)
     elif [[ $CIRCLE_BRANCH ==  feature/* ]] ; then
-      git fetch origin develop:develop
+      git fetch --force origin develop:develop
       WORD_COUNT=$(git diff --name-only develop modules/$MODULE_NAME | wc -l)
     elif [[ $CIRCLE_BRANCH ==  hotfix/* ]] || [[ $CIRCLE_BRANCH ==  release/* ]] ; then
-      git fetch origin master:master
+      git fetch --force origin master:master
       WORD_COUNT=$(git diff --name-only master modules/$MODULE_NAME | wc -l)
     else
       echo "Invalid branch name pattern!"
