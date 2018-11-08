@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-from pangea_modules.base.analysis_utils import boxplot
+from pangea_modules.base.utils import boxplot
 
 
 class TestAverageGenomeSizeTasks(TestCase):

@@ -1,1 +1,1 @@
-"""Utilities for aiding testing of PangeaModules."""
+"""Test suite for base AnalysisModule functionality."""

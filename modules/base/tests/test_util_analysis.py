@@ -1,18 +1,25 @@
 """Test suite for AnalysisModule utility tasks."""
 
+import os
 from unittest import TestCase
-from uuid import uuid4
 
-from pangea_modules.base.kraken import KrakenResultModule
-from pangea_modules.base.kraken.tests.factory import create_result as create_kraken
+from pangea_modules.krakenhll_data import KrakenHLLResultModule
 
-from pangea_modules.base.analysis_utils import (
+from pangea_modules.base.utils import (
     categories_from_metadata,
     collate_samples,
+    relative_import,
 )
 
 
-KRAKEN_NAME = KrakenResultModule.name()
+model_factory = relative_import(  # pylint: disable=invalid-name
+    'krakenhll_data.factory',
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 '../../krakenhll_data/tests/factory.py')
+)
+
+
+KRAKEN_NAME = KrakenHLLResultModule.name()
 
 
 class TestDisplayModuleUtilityTasks(TestCase):
@@ -27,9 +34,8 @@ class TestDisplayModuleUtilityTasks(TestCase):
         metadata2 = {
             'valid_category': 'baz',
         }
-        sample1 = {'name': 'Sample01', 'library_uuid': uuid4(), 'metadata': metadata1}
-        sample2 = {'name': 'Sample02', 'library_uuid': uuid4(), 'metadata': metadata2}
-
+        sample1 = {'name': 'Sample01', 'metadata': metadata1}
+        sample2 = {'name': 'Sample02', 'metadata': metadata2}
         result = categories_from_metadata([sample1, sample2])
         self.assertEqual(1, len(result.keys()))
         self.assertNotIn('invalid_category', result)
@@ -41,13 +47,11 @@ class TestDisplayModuleUtilityTasks(TestCase):
         """Ensure collate_samples task works."""
         sample1 = {
             'name': 'Sample01',
-            'library_uuid': uuid4(),
-            KRAKEN_NAME: create_kraken(save=False),
+            KRAKEN_NAME: model_factory.create_result(save=False),
         }
         sample2 = {
             'name': 'Sample02',
-            'library_uuid': uuid4(),
-            KRAKEN_NAME: create_kraken(save=False),
+            KRAKEN_NAME: model_factory.create_result(save=False),
         }
         samples = [sample1, sample2]
         result = collate_samples(KRAKEN_NAME, ['taxa'], samples)

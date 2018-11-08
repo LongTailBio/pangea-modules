@@ -24,16 +24,17 @@ pypi_step: &pypi_step
 abort_if_no_change: &abort_if_no_change
   name: Abort if no changes
   command: |
-    set +x
+    # Build every module for tagged releases
+    if [ -n "$CIRCLE_TAG" ] ; then exit 0; fi
 
     if [ $CIRCLE_BRANCH = "master" ] || [ $CIRCLE_BRANCH = "develop" ] ; then
-      WORD_COUNT=$(git diff HEAD@{1} modules/$MODULE_NAME | wc -l)
+      WORD_COUNT=$(git diff --name-only HEAD@{1} modules/$MODULE_NAME | wc -l)
     elif [[ $CIRCLE_BRANCH ==  feature/* ]] ; then
       git fetch origin develop:develop
-      WORD_COUNT=$(git diff develop modules/$MODULE_NAME | wc -l)
-    elif [[ $CIRCLE_BRANCH ==  hotfix/* ]] ; then
+      WORD_COUNT=$(git diff --name-only develop modules/$MODULE_NAME | wc -l)
+    elif [[ $CIRCLE_BRANCH ==  hotfix/* ]] || [[ $CIRCLE_BRANCH ==  release/* ]] ; then
       git fetch origin master:master
-      WORD_COUNT=$(git diff master modules/$MODULE_NAME | wc -l)
+      WORD_COUNT=$(git diff --name-only master modules/$MODULE_NAME | wc -l)
     else
       echo "Invalid branch name pattern!"
       exit 1
@@ -87,7 +88,22 @@ default_test: &default_test
         command: |
           . venv/bin/activate
           cd modules/$MODULE_NAME
-          pylint pangea_modules/$MODULE_NAME
+          pylint pangea_modules/$MODULE_NAME tests
+
+    - run:
+        name: Run tests
+        command: |
+          set +e
+          . venv/bin/activate
+          python -m pytest --color=yes modules/$MODULE_NAME -s
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 5 ] ; then
+            # https://docs.pytest.org/en/latest/usage.html#possible-exit-codes
+            echo "Squashing pytest's non-zero exit code for 'no tests run'."
+            exit 0
+          else
+            exit $EXIT_CODE
+          fi
 
 
 # Common step for adding Longtail PyPI index
@@ -147,6 +163,40 @@ default_publish: &default_publish
 
 # CircleCI Jobs
 jobs:
+  # ----- AGS -----
+  test_ags:
+    <<: *default_test
+    environment:
+      MODULE_NAME: ags
+
+  publish_ags:
+    <<: *default_publish
+    environment:
+      MODULE_NAME: ags
+
+  # ----- Ancestry -----
+  test_ancestry:
+    <<: *default_test
+    environment:
+      MODULE_NAME: ancestry
+
+  publish_ancestry:
+    <<: *default_publish
+    environment:
+      MODULE_NAME: ancestry
+
+  # ----- Ancestry Data -----
+  test_ancestry_data:
+    <<: *default_test
+    environment:
+      MODULE_NAME: ancestry_data
+
+  publish_ancestry_data:
+    <<: *default_publish
+    environment:
+      MODULE_NAME: ancestry_data
+
+  # ----- Base -----
   test_base:
     <<: *default_test
     environment:
@@ -157,54 +207,126 @@ jobs:
     environment:
       MODULE_NAME: base
 
-  test_humann2:
+  # ----- KrakenHLL Data -----
+  test_krakenhll_data:
     <<: *default_test
     environment:
-      MODULE_NAME: humann2
+      MODULE_NAME: krakenhll_data
 
-  publish_humann2:
+  publish_krakenhll_data:
     <<: *default_publish
     environment:
-      MODULE_NAME: humann2
+      MODULE_NAME: krakenhll_data
 
-  test_krakenhll:
+  # ----- Metaphlan2 Data -----
+  test_metaphlan2_data:
     <<: *default_test
     environment:
-      MODULE_NAME: krakenhll
+      MODULE_NAME: metaphlan2_data
 
-  publish_krakenhll:
+  publish_metaphlan2_data:
     <<: *default_publish
     environment:
-      MODULE_NAME: krakenhll
+      MODULE_NAME: metaphlan2_data
+
+  # ----- Microbe Census Data -----
+  test_microbe_census_data:
+    <<: *default_test
+    environment:
+      MODULE_NAME: microbe_census_data
+
+  publish_microbe_census_data:
+    <<: *default_publish
+    environment:
+      MODULE_NAME: microbe_census_data
+
+  # ----- Sample Similarity -----
+  test_sample_similarity:
+    <<: *default_test
+    environment:
+      MODULE_NAME: sample_similarity
+
+  publish_sample_similarity:
+    <<: *default_publish
+    environment:
+      MODULE_NAME: sample_similarity
+
+  # ----- Top Taxa -----
+  test_top_taxa:
+    <<: *default_test
+    environment:
+      MODULE_NAME: top_taxa
+
+  publish_top_taxa:
+    <<: *default_publish
+    environment:
+      MODULE_NAME: top_taxa
+
+
+publish_tpl: &publish_tpl
+  context: longtail-pypi
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
 
 workflows:
   version: 2
 
+  # Run parallel pipelines for each tool, skipping if there are no changes
   base_cd:
     jobs:
+      - test_ags
+      - publish_ags:
+          <<: *publish_tpl
+          requires:
+            - test_ags
+
+      - test_ancestry
+      - publish_ancestry:
+          <<: *publish_tpl
+          requires:
+            - test_ancestry
+
+      - test_ancestry_data
+      - publish_ancestry_data:
+          <<: *publish_tpl
+          requires:
+            - test_ancestry_data
+
       - test_base
       - publish_base:
-          context: longtail-pypi
-          filters:
-            branches:
-              only: master
+          <<: *publish_tpl
           requires:
             - test_base
 
-      - test_humann2
-      - publish_humann2:
-          context: longtail-pypi
-          filters:
-            branches:
-              only: master
+      - test_krakenhll_data
+      - publish_krakenhll_data:
+          <<: *publish_tpl
           requires:
-            - test_humann2
+            - test_krakenhll_data
 
-      - test_krakenhll
-      - publish_krakenhll:
-          context: longtail-pypi
-          filters:
-            branches:
-              only: master
+      - test_metaphlan2_data
+      - publish_metaphlan2_data:
+          <<: *publish_tpl
           requires:
-            - test_krakenhll
+            - test_metaphlan2_data
+
+      - test_microbe_census_data
+      - publish_microbe_census_data:
+          <<: *publish_tpl
+          requires:
+            - test_microbe_census_data
+
+      - test_sample_similarity
+      - publish_sample_similarity:
+          <<: *publish_tpl
+          requires:
+            - test_sample_similarity
+
+      - test_top_taxa
+      - publish_top_taxa:
+          <<: *publish_tpl
+          requires:
+            - test_top_taxa
