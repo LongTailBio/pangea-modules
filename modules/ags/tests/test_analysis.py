@@ -7,7 +7,7 @@ from pangea_modules.ags.analysis import ags_distributions
 from pangea_modules.base.utils import relative_import
 
 
-factory = relative_import(  # pylint: disable=invalid-name
+model_factory = relative_import(  # pylint: disable=invalid-name
     'microbe_census_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../microbe_census_data/tests/factory.py')
@@ -26,7 +26,7 @@ class TestAverageGenomeSizeTasks(TestCase):
             sample = {
                 'name': f'SMPL_{i}',
                 'metadata': metadata,
-                'microbe_census': factory.create_values(),
+                'microbe_census': model_factory.create_values(),
             }
             return sample
 

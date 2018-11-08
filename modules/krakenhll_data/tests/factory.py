@@ -10,7 +10,7 @@ from pangea_modules.krakenhll_data.models import KrakenHLLResult
 from pangea_modules.base.utils import relative_import
 
 
-factory = relative_import(  # pylint: disable=invalid-name
+model_factory = relative_import(  # pylint: disable=invalid-name
     'metaphlan2_data.factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../metaphlan2_data/tests/factory.py')
@@ -19,7 +19,7 @@ factory = relative_import(  # pylint: disable=invalid-name
 
 def create_result(taxa_count=10, save=False):
     """Create KrakenHLL Result with specified number of taxa."""
-    taxa = factory.create_values(taxa_count=taxa_count)
+    taxa = model_factory.create_values(taxa_count=taxa_count)
     result = KrakenHLLResult(taxa=taxa)
     if save:
         result.save()
@@ -37,4 +37,4 @@ class KrakenHLLResultFactory(factory.mongoengine.MongoEngineFactory):
     @factory.lazy_attribute
     def taxa(self):
         """Return taxa."""
-        return factory.create_values()
+        return model_factory.create_values()

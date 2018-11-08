@@ -15,8 +15,8 @@ from pangea_modules.sample_similarity.analysis import (
 )
 
 
-factory = relative_import(  # pylint: disable=invalid-name
-    'krakenhll_data.factory',
+model_factory = relative_import(  # pylint: disable=invalid-name
+    'krakenhll_data_factory',
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                  '../../krakenhll_data/tests/factory.py')
 )
@@ -30,7 +30,7 @@ class TestSampleSimilarityTasks(TestCase):
 
     def test_clean_samples(self):
         """Ensure get_clean_samples method adds missing features to all samples."""
-        sample_dict = {f'SMPL_{i}': factory.create_result(save=False).taxa
+        sample_dict = {f'SMPL_{i}': model_factory.create_result(save=False).taxa
                        for i in range(3)}
 
         all_feature_ids = set([])
@@ -45,7 +45,7 @@ class TestSampleSimilarityTasks(TestCase):
 
     def test_clean_zeroed_samples(self):
         """Ensure get_clean_samples method removes features below threshold."""
-        sample_dict = {f'SMPL_{i}': dict(factory.create_result(save=False).taxa)
+        sample_dict = {f'SMPL_{i}': dict(model_factory.create_result(save=False).taxa)
                        for i in range(3)}
         sample_dict['SMPL_1']['somebadkingdom'] = 0.0000001
 
@@ -64,7 +64,7 @@ class TestSampleSimilarityTasks(TestCase):
 
         tSNE is non-deterministic so that is as close as we can get to a real test.
         """
-        sample_dict = {f'SMPL_{i}': dict(factory.create_result(save=False).taxa)
+        sample_dict = {f'SMPL_{i}': dict(model_factory.create_result(save=False).taxa)
                        for i in range(3)}
         tsne_output = run_tsne(sample_dict)
         self.assertEqual((3, 2), tsne_output.shape)
@@ -87,7 +87,7 @@ class TestSampleSimilarityTasks(TestCase):
             sample_data = {
                 'name': f'SMPL_{i}',
                 'library_uuid': uuid4(),
-                KRAKEN_NAME: factory.create_result(save=False),
+                KRAKEN_NAME: model_factory.create_result(save=False),
             }
             return sample_data
 
