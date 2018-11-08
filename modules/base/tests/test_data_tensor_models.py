@@ -3,11 +3,11 @@
 import mongoengine as mdb
 from unittest import TestCase
 
-from pangea_modules.base.data_tensors import (
+from pangea_modules.data_tensors import (
     Vector,
     Matrix,
 )
-from pangea_modules.base.data_tensor_models import (
+from pangea_modules.data_tensor_models import (
     VectorModel,
     MatrixModel,
 )
