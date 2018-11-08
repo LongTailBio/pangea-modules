@@ -6,7 +6,7 @@ requirements = ['pangea_modules.base', 'pangea_modules.microbe_census_data', 'mo
 
 setup(
     name=microlib_name,
-    version='0.1.0',
+    version='0.1.2',
     author='Longtail Biotech',
     author_email='dev@longtailbio.com',
     description=('Average Genome Size display the distribution of average '
