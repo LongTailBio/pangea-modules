@@ -14,6 +14,6 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):
     """Represent a mathematical vector for the db."""
 
     def __init__(self, dtype: ScalarModel, indexed=True):
-        super(Vector).__init__(self, dtype, indexed=indexed, return_type=Vector)
+        super(VectorModel).__init__(self, dtype, indexed=indexed, return_type=Vector)
         self.dtype = dtype
         self.indexed = indexed
