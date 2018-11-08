@@ -1,5 +1,3 @@
 --index-url https://pypi.python.org/simple
 
-../krakenhll_data/
-
 -e .

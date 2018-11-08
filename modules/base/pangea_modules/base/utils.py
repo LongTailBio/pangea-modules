@@ -1,5 +1,6 @@
 """Utilities for AnalysisModules."""
 
+import importlib.util
 import inspect
 
 from mongoengine import QuerySet
@@ -77,6 +78,14 @@ def collate_samples(tool_name, fields, samples):
             sample_dict[sample_name][field] = tool_result[field]
 
     return sample_dict
+
+
+def relative_import(name, path):
+    """Import a module from a path."""
+    spec = importlib.util.spec_from_file_location(name, path)
+    tmp_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tmp_module)
+    return tmp_module
 
 
 def categories_from_metadata(samples, min_size=2):

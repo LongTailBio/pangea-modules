@@ -3,7 +3,7 @@
 from unittest import TestCase
 
 from mongoengine import ValidationError
-from ..models import DistributionResult
+from pangea_modules.base.models import DistributionResult
 
 
 class TestAverageGenomeSizeModels(TestCase):

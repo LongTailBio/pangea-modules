@@ -1,13 +1,21 @@
 """Test suite for AnalysisModule utility tasks."""
 
+import os
 from unittest import TestCase
 
 from pangea_modules.krakenhll_data import KrakenHLLResultModule
-from pangea_modules.krakenhll_data.tests.factory import create_result as create_kraken
 
 from pangea_modules.base.utils import (
     categories_from_metadata,
     collate_samples,
+    relative_import,
+)
+
+
+factory = relative_import(  # pylint: disable=invalid-name
+    'factory',
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 '../../krakenhll_data/tests/factory.py')
 )
 
 
@@ -37,8 +45,14 @@ class TestDisplayModuleUtilityTasks(TestCase):
 
     def test_collate_samples(self):
         """Ensure collate_samples task works."""
-        sample1 = {'name': 'Sample01', KRAKEN_NAME: create_kraken(save=False)}
-        sample2 = {'name': 'Sample02', KRAKEN_NAME: create_kraken(save=False)}
+        sample1 = {
+            'name': 'Sample01',
+            KRAKEN_NAME: factory.create_result(save=False),
+        }
+        sample2 = {
+            'name': 'Sample02',
+            KRAKEN_NAME: factory.create_result(save=False),
+        }
         samples = [sample1, sample2]
         result = collate_samples(KRAKEN_NAME, ['taxa'], samples)
         self.assertIn('Sample01', result)
