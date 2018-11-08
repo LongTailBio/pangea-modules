@@ -2,8 +2,6 @@
 
 """Factory for generating Ancestry models for testing."""
 
-import os
-
 import factory
 from pandas import DataFrame
 

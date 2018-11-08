@@ -2,7 +2,6 @@
 
 """Factory for generating Top Taxa models for testing."""
 
-import os
 from random import random
 
 import factory

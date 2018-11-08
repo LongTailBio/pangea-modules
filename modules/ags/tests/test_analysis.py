@@ -1,6 +1,5 @@
 """Test suite for Average Genome Size analysis."""
 
-import os
 from unittest import TestCase
 
 from pangea_modules.ags.analysis import ags_distributions

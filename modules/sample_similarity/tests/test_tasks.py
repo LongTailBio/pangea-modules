@@ -1,7 +1,5 @@
 """Test suite for Sample Similarity tasks."""
 
-import os
-
 from uuid import uuid4
 from unittest import TestCase
 
