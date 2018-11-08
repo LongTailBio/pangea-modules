@@ -7,24 +7,11 @@ from random import random
 
 import factory
 
-from pangea_modules.base.utils import relative_import
 from pangea_modules.krakenhll_data import KrakenHLLResultModule
+from pangea_modules.krakenhll_data.factory import create_result as create_krakenhll
 from pangea_modules.metaphlan2_data import Metaphlan2ResultModule
+from pangea_modules.metaphlan2_data.factory import create_result as create_metaphlan2
 from pangea_modules.top_taxa.models import TopTaxaResult
-
-
-krakenhll_factory = relative_import(  # pylint: disable=invalid-name
-    'krakenhll_data.factory',
-    os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                 '../../krakenhll_data/tests/factory.py')
-)
-
-
-metaphlan2_factory = relative_import(  # pylint: disable=invalid-name
-    'metaphlan2_data.factory',
-    os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                 '../../metaphlan2_data/tests/factory.py')
-)
 
 
 KRAKENHLL = KrakenHLLResultModule.name()
@@ -34,8 +21,8 @@ METAPHLAN = Metaphlan2ResultModule.name()
 def create_values():
     """Return values for top taxa sample."""
     return {
-        KRAKENHLL: krakenhll_factory.create_result(),
-        METAPHLAN: metaphlan2_factory.create_result(),
+        KRAKENHLL: create_krakenhll(),
+        METAPHLAN: create_metaphlan2(),
     }
 
 
