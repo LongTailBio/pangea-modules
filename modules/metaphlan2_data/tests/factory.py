@@ -2,7 +2,6 @@
 
 """Factory for generating Metaphlan2 result models for testing."""
 
-import random
 import factory
 
 from pangea_modules.base.factory_utils import create_taxa_values

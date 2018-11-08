@@ -2,8 +2,6 @@
 
 """Factory for generating KrakenHLL result models for testing."""
 
-import os
-
 import factory
 
 from pangea_modules.base.factory_utils import create_taxa_values
