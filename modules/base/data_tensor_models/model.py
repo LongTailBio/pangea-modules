@@ -1,0 +1,86 @@
+
+import mongoengine as mdb
+
+
+class ModelError(Exception):
+    """Represent an error with a model."""
+    pass
+
+
+class DataModel:
+
+    def get_document_class(self):
+        """Return the mongodb class matching this model."""
+        raise NotImplementedError()
+
+    def validate(self):
+        """Return a 'clean' function for the mongodb class."""
+        return None
+
+    def from_son(self, son_str):
+        """Return an instantiated data type from SON input."""
+        raise NotImplementedError()
+
+
+class FixedGroupModel(DataModel):
+    """Fixed Groups have a predefined number of named parameters.
+
+    Each parameter can be a different DataModel.
+    """
+
+    def __init__(self, model=None, **dtypes: {str: DataModel}):
+        super(FixedGroupModel).__init__(self)
+        self.dtypes = dtypes
+        for val in self.dtypes.values():
+            if model and type(val) is not model:
+                raise ModelError()
+
+    def get_document_class(self):
+        """Return an anonymous Field Class with subfields as specified."""
+        return type(
+            '',
+            (mdb.EmbeddedDocumentField,),
+            {key: val.get_document_class() for key, val in self.dtypes.items()}
+        )
+
+    def from_son(self, son):
+        """Return a dict mapping keys to objects."""
+        return {
+            key: self.dtypes[key].from_son(val)
+            for key, val in son.items()
+        }
+
+
+class UnlimitedGroupModel(DataModel):
+    """Unlimited Groups may have any number of parameters.
+
+    Parameters may be named (dict) or numbered (list).
+    """
+
+    def __init__(self, dtype: DataModel, indexed=True, return_type=None):
+        super(UnlimitedGroupModel).__init__(self)
+        self.dtype = dtype
+        self.indexed = indexed
+        self.return_type = return_type
+
+    def get_document_class(self):
+        """Return a Map or List Field as appropriate."""
+        sub_class = self.dtype.get_document_class()
+        if self.indexed:
+            return mdb.MapField(field=sub_class)
+        return mdb.ListField(field=sub_class)
+
+    def from_son(self, son):
+        """Return a dict or list with sub objects as appropriate."""
+        if self.indexed:
+            recursed = {key: self.dtype.from_son(val) for key, val in son.items()}
+        recursed = [self.dtype.from_son(val) for val in son]
+        if self.return_type:
+            recursed = self.return_type(recursed)
+        return recursed
+
+
+class FileModel(DataModel):
+    """Represent a particular file stored on S3 or similar."""
+    pass
+
