@@ -77,8 +77,19 @@ For a single module (ex. KrakenHLL):
 $ python -m pytest --color=yes modules/krakenhll -s
 ```
 
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository][project-tags].
+
+## Release History
+
+See [`CHANGELOG.md`](CHANGELOG.md).
+
 ## Acknowledgments
 
 Thanks to Christian Hettlage for his post on [setting up a pypi server](https://medium.com/@christianhettlage/setting-up-a-pypi-server-679f1b55b96).
 
 Thanks to Jorge Herrera at Shazam for a [great writeup on Python microlibs](https://blog.shazam.com/python-microlibs-5be9461ad979).
+
+[project-tags]: https://github.com/LongtailBio/pangea-modules/tags
+[contributors]: https://github.com/LongtailBio/pangea-modules/contributors
