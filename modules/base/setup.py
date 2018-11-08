@@ -6,7 +6,7 @@ requirements = ['numpy', 'pandas', 'mongoengine']
 
 setup(
     name=microlib_name,
-    version='0.1.0',
+    version='0.1.2',
     author='Longtail Biotech',
     author_email='dev@longtailbio.com',
     description='Base types for PangeaModules to subclass.',
