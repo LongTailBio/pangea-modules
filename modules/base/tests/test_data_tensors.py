@@ -88,5 +88,3 @@ class TestDataTensors(TestCase):
         transposed = matrix.transposed()
         self.assertEqual(transposed.ncols(), matrix.nrows())
         self.assertEqual(transposed.nrows(), matrix.ncols())
-        self.assertTrue(transposed.row_indexed)
-        self.assertFalse(transposed.col_indexed)

@@ -7,23 +7,24 @@ class Tensor1:  # pylint: disable=too-few-public-methods
     pass
 
 
-class ScalarGroup(Tensor1):
+class ScalarGroup(Tensor1):  # pylint: disable=too-few-public-methods
 
     def __init__(self, **scalars):
         self.scalars = scalars
 
-    def __get__(self, key):
+    def __getitem__(self, key):
         return self.scalars[key]
 
 
 class Vector(Tensor1):
+    """Represent a sequence of numerical scalars."""
 
     def __init__(self, data):
         self.data = data
-        if type(self.data) is list:
+        if data.isinstance(list):
             self.data = {ind: val for ind, val in enumerate(data)}
 
-    def __get__(self, key):
+    def __getitem__(self, key):
         return self.data[key]
 
     def __len__(self):

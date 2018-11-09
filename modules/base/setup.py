@@ -18,8 +18,8 @@ setup(
     packages=[
         microlib_name,
         '{}.utils'.format(microlib_name),
-        '{}.data_tensors'.format(microlib_name),
         '{}.data_tensor_models'.format(microlib_name),
+        '{}.data_tensors'.format(microlib_name),
     ],
     install_requires=requirements,
 )

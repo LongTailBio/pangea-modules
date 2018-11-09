@@ -58,5 +58,5 @@ def flip_nested_dict(nested_dict, recurse=False):
             except KeyError:
                 new_outer[inner_key] = {key: val}
     if recurse and type(val) in [dict, list]:
-        new_outer = {key, flip_nested_dict(val) for key, val in new_outer.items()}
+        new_outer = {key: flip_nested_dict(val) for key, val in new_outer.items()}
     return new_outer

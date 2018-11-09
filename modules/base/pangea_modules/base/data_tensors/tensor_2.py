@@ -1,4 +1,4 @@
-
+"""Represent level 2 tensors."""
 import pandas as pd
 
 from .tensor_1 import Vector
@@ -9,13 +9,13 @@ class Tensor2:  # pylint: disable=too-few-public-methods
     pass
 
 
-class VectorGroup(Tensor2):
+class VectorGroup(Tensor2):  # pylint: disable=too-few-public-methods
     """Represent a discrete, limited, group of named vectors."""
 
     def __init__(self, **vectors):
         self.vectors = vectors
 
-    def __get__(self, key):
+    def __getitem__(self, key):
         return self.vectors[key]
 
 
@@ -24,10 +24,10 @@ class Matrix(Tensor2):
 
     def __init__(self, data):
         self.data = data
-        if type(data) is list:
+        if data.isinstance(list):
             self.data = {ind: val for ind, val in enumerate(data)}
 
-    def __get__(self, key):
+    def __getitem__(self, key):
         return self.data[key]
 
     def ncols(self):
