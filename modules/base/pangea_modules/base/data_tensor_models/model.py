@@ -1,3 +1,4 @@
+"""Core models for tensor data."""
 
 import mongoengine as mdb
 
@@ -10,16 +11,17 @@ class ModelError(Exception):
 
 
 class DataModel:
+    """Base class for data models."""
 
-    def get_document_class(self):
+    def get_document_class(self):  # pylint: disable=no-self-use
         """Return the mongodb class matching this model."""
         raise NotImplementedError()
 
-    def validate(self):
+    def validate(self):  # pylint: disable=no-self-use
         """Return a 'clean' function for the mongodb class."""
         return None
 
-    def from_son(self, son_str):
+    def from_son(self, son):  # pylint: disable=no-self-use
         """Return an instantiated data type from SON input."""
         raise NotImplementedError()
 
@@ -35,7 +37,7 @@ class FixedGroupModel(DataModel):
         self.return_type = return_type
         self.dtypes = dtypes
         for val in self.dtypes.values():
-            if model and type(val) is not model:
+            if model and not val.isinstance(model):
                 raise ModelError()
 
     def get_document_class(self):
@@ -59,7 +61,7 @@ class FixedGroupModel(DataModel):
     def promote(self, observations):
         """Return a promoted version of this group."""
         outer = {}
-        if type(observations) == dict:
+        if observations.isinstance(dict):
             for key, dtype in self.dtypes:
                 inner = {sample: observation[key] for sample, observation in observations.items()}
                 outer[key] = dtype.promote(inner)
@@ -103,9 +105,3 @@ class UnlimitedGroupModel(DataModel):
         flipped = flip_nested_dict(observations)
         flipped = {key: self.dtype.promote(val) for key, val in flipped.items()}
         return flipped
-
-
-class FileModel(DataModel):
-    """Represent a particular file stored on S3 or similar."""
-    pass
-

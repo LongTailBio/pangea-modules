@@ -1,4 +1,4 @@
-
+"""Represent models 2 steps from atomic."""
 from pangea_modules.base.data_tensor import Vector, Matrix
 
 from .models import UnlimitedGroupModel
@@ -7,7 +7,7 @@ from .tensor_1 import VectorModel
 from .utils import flip_nested_dict
 
 
-class Tensor2Model:
+class Tensor2Model:  # pylint: disable=too-few-public-methods
     """Represent a data model that groups groups of atomic data."""
     pass
 
@@ -23,7 +23,7 @@ class MatrixModel(UnlimitedGroupModel, Tensor2Model):
             return_type=Matrix,
         )
 
-    def promote(self, observations):
+    def promote(self, observations): # pylint: disable=no-self-use
         """Return a dictionary of matrices, one matrix for column."""
         flipped = flip_nested_dict(observations, recurse=True)
         promoted = {}

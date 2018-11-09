@@ -2,7 +2,7 @@
 import pandas as pd
 
 
-class Tensor1:
+class Tensor1:  # pylint: disable=too-few-public-methods
     """Represent a group of atomic data."""
     pass
 
@@ -59,4 +59,4 @@ class Vector(Tensor1):
     def as_compositional(self):
         """Return a vector proportional to this one that sums to 1."""
         my_sum = self.sum()
-        return Vector({key: val / my_sum for key, val in self.data.items()}, indexed=self.indexed)
+        return Vector({key: val / my_sum for key, val in self.data.items()})

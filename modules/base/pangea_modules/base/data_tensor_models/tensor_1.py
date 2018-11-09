@@ -1,11 +1,11 @@
-
+"""Represent tensors that contain atomics."""
 from pangea_modules.base.data_tensor import Vector, Matrix
 
 from .models import DataModel, UnlimitedGroupModel
 from .tensor_0 import ScalarModel
 
 
-class Tensor1Model:
+class Tensor1Model:  # pylint: disable=too-few-public-methods
     """Represent a data model that groups atomic data."""
     pass
 
@@ -18,9 +18,10 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):
         self.dtype = dtype
         self.indexed = indexed
 
-    def promote(self, data):
-        if type(data) is dict:
-            matrix = Matrix(data, row_indexed=self.indexed, col_indexed=True)
+    def promote(self, observations):
+        """Return a matrix"""
+        if observations.isinstance(dict):
+            matrix = Matrix(observations, row_indexed=self.indexed, col_indexed=True)
         else:
-            matrix = Matrix(data, row_indexed=self.indexed, col_indexed=False)
+            matrix = Matrix(observations, row_indexed=self.indexed, col_indexed=False)
         return matrix.transpose()

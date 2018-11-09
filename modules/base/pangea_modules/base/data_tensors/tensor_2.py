@@ -4,12 +4,13 @@ import pandas as pd
 from .tensor_1 import Vector
 
 
-class Tensor2:
+class Tensor2:  # pylint: disable=too-few-public-methods
     """Represent a group of groups of atomic data."""
     pass
 
 
 class VectorGroup(Tensor2):
+    """Represent a discrete, limited, group of named vectors."""
 
     def __init__(self, **vectors):
         self.vectors = vectors
@@ -19,6 +20,7 @@ class VectorGroup(Tensor2):
 
 
 class Matrix(Tensor2):
+    """Represent an unlimited group of vectors."""
 
     def __init__(self, data):
         self.data = data
@@ -66,7 +68,7 @@ class Matrix(Tensor2):
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        data = self.iter_cols(operator=lambd.col_indexeda col: col.mean())
+        data = self.iter_cols(operator=lambda col: col.mean())
         return Vector(data)
 
     def row_means(self):

@@ -1,11 +1,13 @@
+"""Represent atomic variables."""
 
 import mongoengine as mdb
+
+from pangea_modules.base.data_tensors import Vector
+
 from .models import DataModel, ModelError
 
-from pangea_modules.base.data_tensor import Vector
 
-
-class Tensor0Model:
+class Tensor0Model:  # pylint: disable=too-few-public-methods
     """Represent a data model that defines atomic data."""
     pass
 
@@ -32,7 +34,7 @@ class ScalarModel(DataModel, Tensor0Model):
         """Return int or float as appropriate."""
         return self.dtype(son_str)
 
-    def promote(Self, observations):
+    def promote(self, observations):  # pylint: disable=no-self-use
         """Return a Vector."""
         return Vector(observations)
 
