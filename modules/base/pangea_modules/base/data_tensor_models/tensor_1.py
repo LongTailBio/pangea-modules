@@ -14,9 +14,10 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):  # pylint: disable=too-few
     """Represent a mathematical vector for the db."""
 
     def __init__(self, dtype: ScalarModel, indexed=True):
-        super(VectorModel).__init__(self, dtype, indexed=indexed, return_type=Vector)
+        super(VectorModel).__init__(self, dtype)
         self.dtype = dtype
         self.indexed = indexed
+        self.return_type = Vector
 
     def promote(self, observations):
         """Return a matrix"""

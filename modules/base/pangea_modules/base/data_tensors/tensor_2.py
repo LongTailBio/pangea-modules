@@ -24,7 +24,7 @@ class Matrix(Tensor2):
 
     def __init__(self, data):
         self.data = data
-        if data.isinstance(list):
+        if isinstance(data, list):
             self.data = {ind: val for ind, val in enumerate(data)}
 
     def __getitem__(self, key):
