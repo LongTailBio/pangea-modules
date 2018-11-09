@@ -94,7 +94,8 @@ class Matrix(Tensor2):
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        self.iter_cols(operator=lambda col: col.mean())
+        data = self.iter_cols(operator=lambda col: col.mean())
+        return Vector(data, indexed=self.col_indexed)
 
     def row_means(self):
         """Return a vector with means for each row."""
