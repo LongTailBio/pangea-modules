@@ -15,7 +15,7 @@ class ScalarModel(DataModel, Tensor0Model):
     """Represent a number."""
 
     def __init__(self, dtype=float, domain=None):
-        super(ScalarModel).__init__()
+        super()
         self.dtype = dtype
         self.min_val, self.max_val = None, None
         if domain:

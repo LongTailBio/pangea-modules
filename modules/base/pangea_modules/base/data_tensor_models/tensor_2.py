@@ -16,10 +16,7 @@ class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few
     """Represent a mathematical matrix to the db."""
 
     def __init__(self, dtype: Tensor0Model, row_indexed=True, col_indexed=True):
-        super(MatrixModel).__init__(
-            self,
-            VectorModel(dtype, indexed=row_indexed),
-        )
+        super(VectorModel(dtype, indexed=row_indexed))
         self.indexed = col_indexed
         self.return_type = Matrix
 

@@ -33,7 +33,7 @@ class FixedGroupModel(DataModel):
     """
 
     def __init__(self, model=None, return_type=None, **dtypes: {str: DataModel}):
-        super(FixedGroupModel).__init__(self)
+        super()
         self.return_type = return_type
         self.dtypes = dtypes
         for val in self.dtypes.values():
@@ -79,7 +79,7 @@ class UnlimitedGroupModel(DataModel):
     """
 
     def __init__(self, dtype: DataModel, indexed=True, return_type=None):
-        super(UnlimitedGroupModel).__init__(self)
+        super()
         self.dtype = dtype
         self.indexed = indexed
         self.return_type = return_type

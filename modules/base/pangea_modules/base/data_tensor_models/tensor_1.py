@@ -14,7 +14,7 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):  # pylint: disable=too-few
     """Represent a mathematical vector for the db."""
 
     def __init__(self, dtype: ScalarModel, indexed=True):
-        super(VectorModel).__init__(self, dtype)
+        super(dtype)
         self.dtype = dtype
         self.indexed = indexed
         self.return_type = Vector
