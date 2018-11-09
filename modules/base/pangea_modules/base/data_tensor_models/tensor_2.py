@@ -1,5 +1,5 @@
 """Represent models 2 steps from atomic."""
-from pangea_modules.base.data_tensor import Vector, Matrix
+from pangea_modules.base.data_tensors import Vector, Matrix
 
 from .models import UnlimitedGroupModel
 from .tensor_0 import Tensor0Model

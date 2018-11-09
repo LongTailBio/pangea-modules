@@ -23,7 +23,8 @@ class DictIsh:
         try:
             self.data[key] = val
         except IndexError:
-            assert type(key) is int
+            if not key.isinstance(int):
+                raise TypeError()
             while len(self.data) < (key + 1):
                 self.data.append(None)
             self[key] = val
@@ -59,6 +60,6 @@ def flip_nested_dict(nested_dict, recurse=False):
                 new_outer[inner_key][key] = val
             except KeyError:
                 new_outer[inner_key] = {key: val}
-    if recurse and type(val) in [dict, list]:
+    if recurse and (val.isinstance(dict) or val.isinstance(list)):
         new_outer = {key: flip_nested_dict(val) for key, val in new_outer.items()}
     return new_outer

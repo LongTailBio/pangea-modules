@@ -1,4 +1,4 @@
-
+"""Represent tensors that contain atomic tensors."""
 import pandas as pd
 
 
@@ -8,7 +8,7 @@ class Tensor1:  # pylint: disable=too-few-public-methods
 
 
 class ScalarGroup(Tensor1):  # pylint: disable=too-few-public-methods
-
+    """Represent a tensor that contains a limited predefined set of atomics."""
     def __init__(self, **scalars):
         self.scalars = scalars
 

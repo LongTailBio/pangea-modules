@@ -1,5 +1,4 @@
 """Represent atomic variables."""
-
 import mongoengine as mdb
 
 from pangea_modules.base.data_tensors import Vector
@@ -50,6 +49,6 @@ class CategoricalModel(DataModel, Tensor0Model):
         """Return StringField."""
         return mdb.StringField(choices=self.options)
 
-    def from_son(self, son_str):
+    def from_son(self, son):  # pylint: disable=no-self-use
         """Return the string."""
-        return son_str
+        return son

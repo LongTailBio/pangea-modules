@@ -1,7 +1,7 @@
 """Represent tensors that contain atomics."""
-from pangea_modules.base.data_tensor import Vector, Matrix
+from pangea_modules.base.data_tensors import Vector, Matrix
 
-from .models import DataModel, UnlimitedGroupModel
+from .models import UnlimitedGroupModel
 from .tensor_0 import ScalarModel
 
 
