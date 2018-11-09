@@ -21,7 +21,7 @@ class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few
             VectorModel(dtype, indexed=row_indexed),
         )
         self.indexed = col_indexed
-        self.return_type = MAtrix
+        self.return_type = Matrix
 
     def promote(self, observations): # pylint: disable=no-self-use
         """Return a dictionary of matrices, one matrix for column."""
