@@ -3,7 +3,7 @@
 for common data analysis use cases.
 """
 
-from .model import (
+from .models import (
     DataModel,
     FixedGroupModel,
     UnlimitedGroupModel,

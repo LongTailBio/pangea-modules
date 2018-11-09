@@ -18,7 +18,7 @@ class ScalarModel(DataModel, Tensor0Model):
         super(ScalarModel).__init__()
         self.dtype = dtype
         self.min_val, self.max_val = None, None
-        if self.domain:
+        if domain:
             self.min_val, self.max_val = domain
 
     def get_document_class(self):  # pylint: disable=no-self-use
@@ -29,9 +29,9 @@ class ScalarModel(DataModel, Tensor0Model):
             return mdb.IntField(min_val=self.min_val, max_val=self.max_val)
         raise ModelError(f'data type {self.dtype} not available.')
 
-    def from_son(self, son_str):
+    def from_son(self, son):
         """Return int or float as appropriate."""
-        return self.dtype(son_str)
+        return self.dtype(son)
 
     def promote(self, observations):  # pylint: disable=no-self-use
         """Return a Vector."""
