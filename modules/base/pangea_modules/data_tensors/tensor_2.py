@@ -48,7 +48,7 @@ class Matrix(Tensor2):
         for key, col in self.data.items():
             yield key, operator(col)
 
-    def transpose(self):
+    def transposed(self):
         """Flip rows and columns of this matrix."""
         outer = {}
         for col_name, row in self.data.items():
@@ -62,13 +62,13 @@ class Matrix(Tensor2):
 
     def iter_rows(self, operator=lambda x: x):
         """Yield key, vector pairs for each row. Ineffecient."""
-        return self.transpose().iter_cols(operator=operator)
+        return self.transposed().iter_cols(operator=operator)
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        data = self.iter_cols(operator=lambda col: col.mean())
-        return Vector(data, indexed=self.col_indexed)
+        data = self.iter_cols(operator=lambd.col_indexeda col: col.mean())
+        return Vector(data)
 
     def row_means(self):
         """Return a vector with means for each row."""
-        return self.transpose().col_means()
+        return self.transposed().col_means()

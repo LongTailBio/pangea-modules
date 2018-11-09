@@ -1,7 +1,7 @@
 """Test suite for Data Tensor Models."""
+from unittest import TestCase
 
 import mongoengine as mdb
-from unittest import TestCase
 
 from pangea_modules.data_tensors import (
     Vector,
@@ -42,7 +42,7 @@ class TestDataTensorModels(TestCase):
 
     def test_indexed_matrix_produces_correct_schema(self):
         """Ensure an indexed matrix produces the correct mongoengine type."""
-        indexed_matrix_model = MatrixModel(float, indexed=True)
+        indexed_matrix_model = MatrixModel(float, col_indexed=True)
         self.assertIs(type(indexed_matrix_model.get_document_class()), mdb.MapField)
 
     def test_indexed_matrix_from_son(self):
@@ -51,7 +51,7 @@ class TestDataTensorModels(TestCase):
             'col_1': {'row_1': 1, 'row_2': 2},
             'col_2': {'row_1': 3, 'row_2': 4},
         }
-        indexed_matrix_model = MatrixModel(float, indexed=True)
+        indexed_matrix_model = MatrixModel(float, col_indexed=True)
         indexed_matrix = indexed_matrix_model.from_son(data)
         self.assertIs(type(indexed_matrix), Matrix)
         self.assertTrue(indexed_matrix.col_indexed)
