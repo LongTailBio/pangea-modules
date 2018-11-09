@@ -1,6 +1,8 @@
-[]
+
 import mongoengine as mdb
 from .models import DataModel, ModelError
+
+from pangea_modules.base.data_tensor import Vector
 
 
 class Tensor0Model:
@@ -29,6 +31,10 @@ class ScalarModel(DataModel, Tensor0Model):
     def from_son(self, son_str):
         """Return int or float as appropriate."""
         return self.dtype(son_str)
+
+    def promote(Self, observations):
+        """Return a Vector."""
+        return Vector(observations)
 
 
 class CategoricalModel(DataModel, Tensor0Model):

@@ -18,9 +18,10 @@ class ScalarGroup(Tensor1):
 
 class Vector(Tensor1):
 
-    def __init__(self, data, indexed=True):
+    def __init__(self, data):
         self.data = data
-        self.indexed = indexed
+        if type(self.data) is list:
+            self.data = {ind: val for ind, val in enumerate(data)}
 
     def __get__(self, key):
         return self.data[key]
@@ -35,18 +36,12 @@ class Vector(Tensor1):
 
     def iter(self):
         """Yield tuples of key, value."""
-        if self.indexed:
-            for key, val in self.data:
-                yield key, val
-        else:
-            for ind, val in enumerate(self.data):
-                yield ind, val
+        for key, val in self.data.items():
+            yield key, val
 
     def sum(self):
         """Return the sum of values in this vector."""
-        if self.indexed:
-            return sum(self.data.values())
-        return sum(self.data)
+        return sum(self.data.values())
 
     def mean(self):
         """Return the mean value of this vector."""
@@ -54,9 +49,7 @@ class Vector(Tensor1):
 
     def median(self):
         """Return the median value of this vector."""
-        vals = self.data
-        if self.indexed:
-            vals = list(self.data.values())
+        vals = list(self.data.values())
         vals = sorted(vals)
         if len(vals) % 2 == 0:
             ind = len(vals) / 2
@@ -66,6 +59,4 @@ class Vector(Tensor1):
     def as_compositional(self):
         """Return a vector proportional to this one that sums to 1."""
         my_sum = self.sum()
-        if self.indexed:
-            return Vector({key: val / my_sum for key, val in self.data.items()}, indexed=True)
-        return Vector([val / my_sum for val in self.data], indexed=False)
+        return Vector({key: val / my_sum for key, val in self.data.items()}, indexed=self.indexed)

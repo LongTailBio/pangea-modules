@@ -1,6 +1,8 @@
 
 import mongoengine as mdb
 
+from .utils import flip_nested_dict
+
 
 class ModelError(Exception):
     """Represent an error with a model."""
@@ -28,8 +30,9 @@ class FixedGroupModel(DataModel):
     Each parameter can be a different DataModel.
     """
 
-    def __init__(self, model=None, **dtypes: {str: DataModel}):
+    def __init__(self, model=None, return_type=None, **dtypes: {str: DataModel}):
         super(FixedGroupModel).__init__(self)
+        self.return_type = return_type
         self.dtypes = dtypes
         for val in self.dtypes.values():
             if model and type(val) is not model:
@@ -45,10 +48,26 @@ class FixedGroupModel(DataModel):
 
     def from_son(self, son):
         """Return a dict mapping keys to objects."""
-        return {
+        recursed = {
             key: self.dtypes[key].from_son(val)
             for key, val in son.items()
         }
+        if self.return_type:
+            return self.return_type(recursed)
+        return recursed
+
+    def promote(self, observations):
+        """Return a promoted version of this group."""
+        outer = {}
+        if type(observations) == dict:
+            for key, dtype in self.dtypes:
+                inner = {sample: observation[key] for sample, observation in observations.items()}
+                outer[key] = dtype.promote(inner)
+        else:
+            for key, dtype in self.dtypes:
+                inner = [observation[key] for observation in observations]
+                outer[key] = dtype.promote(inner)
+        return outer
 
 
 class UnlimitedGroupModel(DataModel):
@@ -78,6 +97,12 @@ class UnlimitedGroupModel(DataModel):
         if self.return_type:
             recursed = self.return_type(recursed)
         return recursed
+
+    def promote(self, observations):
+        """Return a promoted version of this group."""
+        flipped = flip_nested_dict(observations)
+        flipped = {key: self.dtype.promote(val) for key, val in flipped.items()}
+        return flipped
 
 
 class FileModel(DataModel):

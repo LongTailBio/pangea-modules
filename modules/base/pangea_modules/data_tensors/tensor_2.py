@@ -20,9 +20,10 @@ class VectorGroup(Tensor2):
 
 class Matrix(Tensor2):
 
-    def __init__(self, data, row_indexed=True, col_indexed=True):
+    def __init__(self, data):
         self.data = data
-        self.row_indexed, self.col_indexed = row_indexed, col_indexed
+        if type(data) is list:
+            self.data = {ind: val for ind, val in enumerate(data)}
 
     def __get__(self, key):
         return self.data[key]
@@ -33,12 +34,10 @@ class Matrix(Tensor2):
 
     def nrows(self):
         """Return the number of rows in this matrix."""
-        if self.ncols() == 0:
+        val = len(next(self.data.values()))
+        if val is None:
             return 0
-        if not self.col_indexed:
-            return len(self.data[0])
-        for val in self.data.values():
-            return len(val)
+        return val
 
     def as_pandas(self):
         """Return this matrix as a pandas dataframe."""
@@ -46,47 +45,20 @@ class Matrix(Tensor2):
 
     def iter_cols(self, operator=lambda x: x):
         """Yield tuples of key, vectors one for each col."""
-        if self.col_indexed:
-            for key, col in self.data.items():
-                yield key, operator(col)
-        else:
-            for ind, col in enumerate(self.data):
-                yield ind, operator(col)
+        for key, col in self.data.items():
+            yield key, operator(col)
 
     def transpose(self):
         """Flip rows and columns of this matrix."""
-        outer = []
-        if self.row_indexed:
-            outer = {}
-        if self.col_indexed:
-            for col_name, row in self.data:
-                if self.row_indexed:
-                    for row_name, val in row.iter():
-                        try:
-                            outer[row_name][col_name] = val
-                        except KeyError:
-                            outer[row_name] = {col_name: val}
-                else:
-                    for _, val in row.iter():
-                        try:
-                            outer[row_name].append(val)
-                        except KeyError:
-                            outer[row_name] = [val]
-        else:
-            for ind, row in enumerate(self.data):
-                if self.row_indexed:
-                    for row_name, val in row.iter():
-                        try:
-                            outer[ind][col_name] = val
-                        except IndexError:
-                            outer.append({col_name: val})
-                else:
-                    for _, val in row.iter():
-                        try:
-                            outer[ind].append(val)
-                        except IndexError:
-                            outer.append([val])
-        return Matrix(outer, row_indexed=self.col_indexed, col_indexed=self.row_indexed)
+        outer = {}
+        for col_name, row in self.data.items():
+            for row_name, val in row.items():
+                try:
+                    outer[row_name][col_name] = val
+                except KeyError:
+                    outer[row_name] = {col_name: val}
+        outer = {row_name: Vector(row) for row_name, row in outer.items()}
+        return Matrix(outer)
 
     def iter_rows(self, operator=lambda x: x):
         """Yield key, vector pairs for each row. Ineffecient."""
