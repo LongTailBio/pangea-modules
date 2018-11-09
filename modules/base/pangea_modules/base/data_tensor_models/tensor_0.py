@@ -21,7 +21,7 @@ class ScalarModel(DataModel, Tensor0Model):
         if self.domain:
             self.min_val, self.max_val = domain
 
-    def get_document_class(self):  # pylint: disable=no-self-use 
+    def get_document_class(self):  # pylint: disable=no-self-use
         """Return IntField or FloatField as appropriate."""
         if self.dtype is float:
             return mdb.FloatField(min_val=self.min_val, max_val=self.max_val)

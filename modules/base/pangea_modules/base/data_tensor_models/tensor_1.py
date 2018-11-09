@@ -20,8 +20,5 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):  # pylint: disable=too-few
 
     def promote(self, observations):
         """Return a matrix"""
-        if observations.isinstance(dict):
-            matrix = Matrix(observations, row_indexed=self.indexed, col_indexed=True)
-        else:
-            matrix = Matrix(observations, row_indexed=self.indexed, col_indexed=False)
-        return matrix.transpose()
+        matrix = Matrix(observations)
+        return matrix.transposed()
