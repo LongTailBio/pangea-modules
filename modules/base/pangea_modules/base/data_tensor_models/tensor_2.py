@@ -12,7 +12,7 @@ class Tensor2Model:  # pylint: disable=too-few-public-methods
     pass
 
 
-class MatrixModel(UnlimitedGroupModel, Tensor2Model):
+class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few-public-methods
     """Represent a mathematical matrix to the db."""
 
     def __init__(self, dtype: Tensor0Model, row_indexed=True, col_indexed=True):

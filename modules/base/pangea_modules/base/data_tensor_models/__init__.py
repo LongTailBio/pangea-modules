@@ -1,6 +1,6 @@
 """DataModels are a set of classes that construct MongoEngine Fields
 
-for common data analysis use cases. 
+for common data analysis use cases.
 """
 
 from .model import (

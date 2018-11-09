@@ -22,7 +22,7 @@ class Vector(Tensor1):
     def __init__(self, data):
         self.data = data
         if data.isinstance(list):
-            self.data = {ind: val for ind, val in enumerate(data)}
+            self.data = {indvar: val for indvar, val in enumerate(data)}
 
     def __getitem__(self, key):
         return self.data[key]

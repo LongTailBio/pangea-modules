@@ -3,7 +3,6 @@
 from unittest import TestCase
 
 from pangea_modules.base.data_tensors import (
-    ScalarGroup,
     Vector,
     Matrix,
 )

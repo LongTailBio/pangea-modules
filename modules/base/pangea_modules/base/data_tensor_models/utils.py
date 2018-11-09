@@ -1,6 +1,8 @@
+"""Utilities for tensor data mdoels."""
 
 
 class DictIsh:
+    """Provide some dict like fucntions regardless of backer is dict or list."""
 
     def __init__(self, data):
         self.data = data
@@ -9,14 +11,14 @@ class DictIsh:
         """Return the length."""
         return len(self.data)
 
-    def __get__(self, key):
+    def __getitem__(self, key):
         """Return value from a key."""
         try:
             return self.data[key]
         except IndexError:
             raise KeyError
 
-    def __set__(self, key, val):
+    def __setitem__(self, key, val):
         """Set a key value."""
         try:
             self.data[key] = val
@@ -49,7 +51,7 @@ def flip_nested_dict(nested_dict, recurse=False):
     """Return a dict with the first two layers of keys flipped.inner_nested_dict
 
     If recurse is true move the outer keys as deep as possible."""
-    new_outer = {}
+    new_outer, val = {}, None
     nested_dict = DictIsh(nested_dict)
     for key, inner_nested_dict in nested_dict.items():
         for inner_key, val in inner_nested_dict.items():

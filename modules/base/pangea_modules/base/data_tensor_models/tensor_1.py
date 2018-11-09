@@ -10,7 +10,7 @@ class Tensor1Model:  # pylint: disable=too-few-public-methods
     pass
 
 
-class VectorModel(UnlimitedGroupModel, Tensor1Model):
+class VectorModel(UnlimitedGroupModel, Tensor1Model):  # pylint: disable=too-few-public-methods
     """Represent a mathematical vector for the db."""
 
     def __init__(self, dtype: ScalarModel, indexed=True):
