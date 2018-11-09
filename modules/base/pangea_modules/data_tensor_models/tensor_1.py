@@ -17,3 +17,5 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):
         super(VectorModel).__init__(self, dtype, indexed=indexed, return_type=Vector)
         self.dtype = dtype
         self.indexed = indexed
+
+
