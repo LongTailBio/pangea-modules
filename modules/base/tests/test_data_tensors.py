@@ -83,3 +83,17 @@ class TestDataTensors(TestCase):
         col_means = matrix.col_means()
         self.assertEquals(col_means['a'], 2)
         self.assertEquals(col_means['b'], 5)
+
+    def test_matrix_transpose(self):
+        """Check that matrix transposition works."""
+        matrix = Matrix(
+            {
+                'a': Vector([1, 2, 3], indexed=False),
+                'b': Vector([4, 5, 6], indexed=False),
+            }
+        )
+        transposed = matrix.transposed()
+        self.assertEquals(transposed.ncols(), matrix.nrows())
+        self.assertEquals(transposed.nrows(), matrix.ncols())
+        self.assertTrue(transposed.row_indexed)
+        self.assertFalse(transposed.col_indexed)
