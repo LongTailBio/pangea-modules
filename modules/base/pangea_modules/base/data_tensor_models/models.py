@@ -82,6 +82,7 @@ class UnlimitedGroupModel(DataModel):
         super()
         self.indexed = indexed
         self.return_type = return_type
+        self.dtype = dtype
 
     def get_document_class(self):
         """Return a Map or List Field as appropriate."""
