@@ -31,14 +31,12 @@ class TestDataTensorModels(TestCase):
         indexed_vector_model = VectorModel(float, indexed=True)
         indexed_vector = indexed_vector_model.from_son({'a': 1, 'b': 2})
         self.assertIs(type(indexed_vector), Vector)
-        self.assertTrue(indexed_vector.indexed)
 
     def test_unindexed_vector_from_son(self):
         """Ensure an indexed vector builds the correct type from a SON blob."""
         unindexed_vector_model = VectorModel(float, indexed=False)
         unindexed_vector = unindexed_vector_model.from_son([1, 2])
         self.assertIs(type(unindexed_vector), Vector)
-        self.assertFalse(unindexed_vector.indexed)
 
     def test_indexed_matrix_produces_correct_schema(self):
         """Ensure an indexed matrix produces the correct mongoengine type."""

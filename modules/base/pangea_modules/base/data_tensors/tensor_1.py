@@ -23,6 +23,7 @@ class Vector(Tensor1):
         self.data = data
         if isinstance(data, list):
             self.data = {indvar: val for indvar, val in enumerate(data)}
+        print(self.data)
 
     def __getitem__(self, key):
         return self.data[key]

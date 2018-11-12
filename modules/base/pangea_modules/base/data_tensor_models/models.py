@@ -95,7 +95,8 @@ class UnlimitedGroupModel(DataModel):
         """Return a dict or list with sub objects as appropriate."""
         if self.indexed:
             recursed = {key: self.dtype.from_son(val) for key, val in son.items()}
-        recursed = [self.dtype.from_son(val) for val in son]
+        else:
+            recursed = [self.dtype.from_son(val) for val in son]
         if self.return_type:
             recursed = self.return_type(recursed)
         return recursed
