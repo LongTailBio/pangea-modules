@@ -36,10 +36,12 @@ class Matrix(Tensor2):
 
     def nrows(self):
         """Return the number of rows in this matrix."""
-        try:
-            return len(self.data.values()[0])
-        except IndexError:
+        if not self.ncols():
             return 0
+        val = len(next(iter(self.data.values())))
+        if val:
+            return val
+        return 0
 
     def as_pandas(self):
         """Return this matrix as a pandas dataframe."""
@@ -68,7 +70,7 @@ class Matrix(Tensor2):
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        data = list(self.iter_cols(operator=lambda col: col.mean()))
+        data = dict(self.iter_cols(operator=lambda col: col.mean()))
         return Vector(data)
 
     def row_means(self):
