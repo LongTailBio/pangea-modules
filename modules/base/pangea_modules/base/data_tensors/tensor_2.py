@@ -36,10 +36,10 @@ class Matrix(Tensor2):
 
     def nrows(self):
         """Return the number of rows in this matrix."""
-        val = len(next(self.data.values()))
-        if val is None:
+        try:
+            return len(self.data.values()[0])
+        except IndexError:
             return 0
-        return val
 
     def as_pandas(self):
         """Return this matrix as a pandas dataframe."""
@@ -54,7 +54,7 @@ class Matrix(Tensor2):
         """Flip rows and columns of this matrix."""
         outer = {}
         for col_name, row in self.data.items():
-            for row_name, val in row.items():
+            for row_name, val in row.iter():
                 try:
                     outer[row_name][col_name] = val
                 except KeyError:
@@ -68,7 +68,7 @@ class Matrix(Tensor2):
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        data = self.iter_cols(operator=lambda col: col.mean())
+        data = list(self.iter_cols(operator=lambda col: col.mean()))
         return Vector(data)
 
     def row_means(self):

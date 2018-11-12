@@ -23,7 +23,6 @@ class Vector(Tensor1):
         self.data = data
         if isinstance(data, list):
             self.data = {indvar: val for indvar, val in enumerate(data)}
-        print(self.data)
 
     def __getitem__(self, key):
         return self.data[key]
@@ -54,7 +53,7 @@ class Vector(Tensor1):
         vals = list(self.data.values())
         vals = sorted(vals)
         if len(vals) % 2 == 0:
-            ind = len(vals) / 2
+            ind = len(vals) // 2
             return (vals[ind] + vals[ind - 1]) / 2
         return vals[len(vals) // 2]
 

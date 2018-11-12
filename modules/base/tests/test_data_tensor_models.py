@@ -52,5 +52,3 @@ class TestDataTensorModels(TestCase):
         indexed_matrix_model = MatrixModel(float, col_indexed=True)
         indexed_matrix = indexed_matrix_model.from_son(data)
         self.assertIs(type(indexed_matrix), Matrix)
-        self.assertTrue(indexed_matrix.col_indexed)
-        self.assertTrue(indexed_matrix.row_indexed)
