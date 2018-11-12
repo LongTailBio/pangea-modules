@@ -78,11 +78,12 @@ class UnlimitedGroupModel(DataModel):
     Parameters may be named (dict) or numbered (list).
     """
 
-    def __init__(self, dtype: DataModel, indexed=True, return_type=None):
+    def __init__(self, dtype: DataModel, indexed=True, return_type=None, allowed_keys=None):
         super()
         self.indexed = indexed
         self.return_type = return_type
         self.dtype = dtype
+        self.allowed_keys = allowed_keys  # doesn't do anything yet
 
     def get_document_class(self):
         """Return a Map or List Field as appropriate."""

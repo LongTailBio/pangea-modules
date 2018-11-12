@@ -1,12 +1,16 @@
 """Top Taxa AnalysisModule."""
 
 from pangea_modules.base import AnalysisModule
+from pangea_modules.base.data_tensor_models import (
+    ScalarModel,
+    FixedGroupModel,
+    UnlimitedGroupModel,
+)
 from pangea_modules.krakenhll_data import KrakenHLLResultModule
 from pangea_modules.metaphlan2_data import Metaphlan2ResultModule
 
 from .analysis import processor
 from .constants import MODULE_NAME
-from .models import TopTaxaResult
 
 
 class TopTaxaAnalysisModule(AnalysisModule):
@@ -18,9 +22,20 @@ class TopTaxaAnalysisModule(AnalysisModule):
         return MODULE_NAME
 
     @staticmethod
-    def result_model():
+    def data_model():
         """Return data model."""
-        return TopTaxaResult
+        return FixedGroupModel(
+            categories=UnlimitedGroupModel(
+                UnlimitedGroupModel(
+                    UnlimitedGroupModel(
+                        FixedGroupModel(
+                            abundance=ScalarModel(domain=(0, 1)),
+                            prevalence=ScalarModel(domain=(0, 1)),
+                        )
+                    )
+                )
+            )
+        )
 
     @staticmethod
     def required_modules():

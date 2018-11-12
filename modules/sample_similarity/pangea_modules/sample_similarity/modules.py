@@ -18,7 +18,7 @@ class SampleSimilarityAnalysisModule(AnalysisModule):
         return MODULE_NAME
 
     @staticmethod
-    def result_model():
+    def data_model():
         """Return data model for Sample Similarity type."""
         return SampleSimilarityResult
 

@@ -1,9 +1,9 @@
 """Metaphlan 2 tool module."""
 
 from pangea_modules.base import AnalysisModule
+from pangea_modules.base.data_tensor_models import ScalarModel, VectorModel
 
 from .constants import MODULE_NAME
-from .models import Metaphlan2Result
 
 
 class Metaphlan2ResultModule(AnalysisModule):
@@ -15,9 +15,9 @@ class Metaphlan2ResultModule(AnalysisModule):
         return MODULE_NAME
 
     @classmethod
-    def result_model(cls):
+    def data_model(cls):
         """Return Metaphlan2 module's model class."""
-        return Metaphlan2Result
+        return VectorModel(ScalarModel(dtype=float, domain=(0, 100)))
 
     @classmethod
     def upload_hooks(cls):

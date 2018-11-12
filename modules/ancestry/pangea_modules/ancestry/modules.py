@@ -22,7 +22,7 @@ class AncestryAnalysisModule(AnalysisModule):
         return MODULE_NAME
 
     @staticmethod
-    def result_model():
+    def data_model():
         """Return the embedded result."""
         return AncestryResult
 
