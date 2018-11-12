@@ -17,7 +17,7 @@ class KrakenHLLResultModule(AnalysisModule):
     @classmethod
     def data_model(cls):
         """Return Kraken module's model class."""
-        return VectorModel(ScalarModel(dtype=int, domain=(0, None)))
+        return VectorModel(ScalarModel(int, domain=(0, None)))
 
     @classmethod
     def upload_hooks(cls):

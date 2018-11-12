@@ -13,8 +13,8 @@ class Tensor1Model:  # pylint: disable=too-few-public-methods
 class VectorModel(UnlimitedGroupModel, Tensor1Model):  # pylint: disable=too-few-public-methods
     """Represent a mathematical vector for the db."""
 
-    def __init__(self, dtype: ScalarModel, indexed=True):
-        super().__init__(dtype, indexed=indexed, return_type=Vector)
+    def __init__(self, dtype: ScalarModel, indexed=True, allowed_keys=None):
+        super().__init__(dtype, indexed=indexed, return_type=Vector, allowed_keys=allowed_keys)
         if self.dtype in (float, int):
             self.dtype = ScalarModel(dtype=self.dtype)
 

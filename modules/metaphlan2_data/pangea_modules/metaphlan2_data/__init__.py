@@ -17,7 +17,7 @@ class Metaphlan2ResultModule(AnalysisModule):
     @classmethod
     def data_model(cls):
         """Return Metaphlan2 module's model class."""
-        return VectorModel(ScalarModel(dtype=float, domain=(0, 100)))
+        return VectorModel(ScalarModel(float, domain=(0, 100)))
 
     @classmethod
     def upload_hooks(cls):
