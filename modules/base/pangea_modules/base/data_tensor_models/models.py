@@ -37,7 +37,7 @@ class FixedGroupModel(DataModel):
         self.return_type = return_type
         self.dtypes = dtypes
         for val in self.dtypes.values():
-            if model and not val.isinstance(model):
+            if model and not isinstance(val, model):
                 raise ModelError()
 
     def get_document_class(self):
@@ -80,7 +80,10 @@ class UnlimitedGroupModel(DataModel):
 
     def __init__(self, dtype: DataModel, indexed=True, return_type=None):
         super()
-        self.dtype = dtype
+        if isinstance(self.dtype, (float, int)):
+            self.dtype = ScalarModel(dtype=self.dtype)
+        else:
+            self.dtype = dtype
         self.indexed = indexed
         self.return_type = return_type
 
