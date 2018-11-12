@@ -2,7 +2,7 @@
 from pangea_modules.base.data_tensors import Vector, Matrix
 
 from .models import UnlimitedGroupModel
-from .tensor_0 import Tensor0Model
+from .tensor_0 import ScalarModel, Tensor0Model
 from .tensor_1 import VectorModel
 from .utils import flip_nested_dict
 
