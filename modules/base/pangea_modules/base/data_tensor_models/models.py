@@ -80,10 +80,6 @@ class UnlimitedGroupModel(DataModel):
 
     def __init__(self, dtype: DataModel, indexed=True, return_type=None):
         super()
-        if isinstance(self.dtype, (float, int)):
-            self.dtype = ScalarModel(dtype=self.dtype)
-        else:
-            self.dtype = dtype
         self.indexed = indexed
         self.return_type = return_type
 
