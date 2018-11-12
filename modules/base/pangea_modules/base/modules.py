@@ -1,7 +1,5 @@
 """AnalysisModule classes."""
 
-import pandas as pd
-
 from .data_tensor_models import DataModel
 from .exceptions import UnsupportedAnalysisMode
 
@@ -20,6 +18,7 @@ class AnalysisModule:
 
     @classmethod
     def result_model(cls):
+        """Return a model that can be used with the database engine."""
         model = cls.data_model()
         if isinstance(model, DataModel):
             return model.get_document_class()
