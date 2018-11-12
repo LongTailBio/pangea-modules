@@ -5,7 +5,7 @@ microlib_name = 'pangea_modules.top_taxa'
 requirements = [
     'mongoengine',
     'pangea_modules.base',
-    'pangea_modeuls.base.data_tensor_models',
+    'pangea_modules.base.data_tensor_models',
     'pangea_modules.krakenhll_data',
     'pangea_modules.metaphlan2_data',
 ]

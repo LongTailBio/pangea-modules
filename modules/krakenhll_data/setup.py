@@ -4,7 +4,7 @@ microlib_name = 'pangea_modules.krakenhll_data'
 
 requirements = [
     'pangea_modules.base',
-    'pangea_modeuls.base.data_tensor_models',
+    'pangea_modules.base.data_tensor_models',
     'mongoengine',
 ]
 
