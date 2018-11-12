@@ -15,7 +15,7 @@ class VectorModel(UnlimitedGroupModel, Tensor1Model):  # pylint: disable=too-few
 
     def __init__(self, dtype: ScalarModel, indexed=True):
         super().__init__(dtype, indexed=indexed, return_type=Vector)
-        if isinstance(self.dtype, (float, int)):
+        if self.dtype in (float, int):
             self.dtype = ScalarModel(dtype=self.dtype)
 
     def promote(self, observations):

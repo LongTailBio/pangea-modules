@@ -19,7 +19,7 @@ class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few
         super().__init__(
             VectorModel(dtype, indexed=row_indexed), indexed=col_indexed, return_type=Matrix
         )
-        if isinstance(self.dtype, (int, float)):
+        if self.dtype in (int, float):
             self.dtype = ScalarModel(dtype=self.dtype)
 
     def promote(self, observations): # pylint: disable=no-self-use
