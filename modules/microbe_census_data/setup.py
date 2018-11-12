@@ -2,7 +2,11 @@ from setuptools import setup
 
 microlib_name = 'pangea_modules.microbe_census_data'
 
-requirements = ['pangea_modules.base', 'mongoengine']
+requirements = [
+    'pangea_modules.base',
+    'pangea_modeuls.base.data_tensor_models',
+    'mongoengine',
+]
 
 setup(
     name=microlib_name,

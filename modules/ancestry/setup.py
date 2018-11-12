@@ -2,7 +2,12 @@ from setuptools import setup
 
 microlib_name = 'pangea_modules.ancestry'
 
-requirements = ['pangea_modules.base', 'pangea_modules.ancestry_data', 'mongoengine']
+requirements = [
+    'pangea_modules.base',
+    'pangea_modeuls.base.data_tensor_models',
+    'pangea_modules.ancestry_data',
+    'mongoengine',
+]
 
 setup(
     name=microlib_name,
