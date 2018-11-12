@@ -1,7 +1,11 @@
 """Ancestry tool module."""
 
 from pangea_modules.base import AnalysisModule
-from pangea_modules.base.data_tensor_models import ScalarModel, VectorModel
+from pangea_modules.base.data_tensor_models import (
+    ScalarModel,
+    VectorModel,
+    FixedGroupModel,
+)
 
 from .constants import MODULE_NAME, KNOWN_LOCATIONS
 
@@ -17,7 +21,9 @@ class AncestryResultModule(AnalysisModule):
     @classmethod
     def data_model(cls):
         """Return Ancestry module's model class."""
-        return VectorModel(ScalarModel(domain=(0, 1)), allowed_keys=KNOWN_LOCATIONS)
+        return FixedGroupModel(
+            populations=VectorModel(ScalarModel(domain=(0, 1)), allowed_keys=KNOWN_LOCATIONS)
+        )
 
     @classmethod
     def upload_hooks(cls):
