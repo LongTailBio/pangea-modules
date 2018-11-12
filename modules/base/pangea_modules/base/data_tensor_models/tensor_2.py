@@ -16,7 +16,9 @@ class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few
     """Represent a mathematical matrix to the db."""
 
     def __init__(self, dtype: Tensor0Model, row_indexed=True, col_indexed=True):
-        super().__init__(VectorModel(dtype, indexed=row_indexed), indexed=col_indexed, return_type=Matrix)
+        super().__init__(
+            VectorModel(dtype, indexed=row_indexed), indexed=col_indexed, return_type=Matrix
+        )
 
     def promote(self, observations): # pylint: disable=no-self-use
         """Return a dictionary of matrices, one matrix for column."""
