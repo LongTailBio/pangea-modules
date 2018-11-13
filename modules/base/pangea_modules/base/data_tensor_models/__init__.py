@@ -5,6 +5,7 @@ for common data analysis use cases.
 
 from .models import (
     DataModel,
+    MongoWrapperModel,
     FixedGroupModel,
     UnlimitedGroupModel,
 )

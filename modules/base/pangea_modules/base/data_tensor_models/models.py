@@ -26,6 +26,25 @@ class DataModel:
         raise NotImplementedError()
 
 
+class MongoWrapperModel(DataModel):
+    """Wrap a mongoengine field directly."""
+
+    def __init__(self, mdb_model):
+        self.model = mdb_model
+
+    def get_document_class(self):
+        """Return the stored model."""
+        return self.model
+
+    def from_son(self, son):
+        """Return the SON as is."""
+        return son
+
+    def promote(self, observations):
+        """Return observations as is."""
+        return observations
+
+
 class FixedGroupModel(DataModel):
     """Fixed Groups have a predefined number of named parameters.
 
