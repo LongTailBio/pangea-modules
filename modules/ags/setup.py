@@ -4,7 +4,6 @@ microlib_name = 'pangea_modules.ags'
 
 requirements = [
     'pangea_modules.base',
-    'pangea_modules.base.data_tensor_models',
     'pangea_modules.microbe_census_data',
     'mongoengine',
 ]

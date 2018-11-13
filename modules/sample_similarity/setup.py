@@ -6,7 +6,6 @@ requirements = [
     'mongoengine',
     'sklearn',
     'pangea_modules.base',
-    'pangea_modules.base.data_tensor_models',
     'pangea_modules.krakenhll_data',
     'pangea_modules.metaphlan2_data',
 ]
