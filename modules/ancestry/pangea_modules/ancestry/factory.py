@@ -5,7 +5,7 @@
 import factory
 from pandas import DataFrame
 
-from pangea_modules.ancestry.models import AncestryAnalysisModule
+from pangea_modules.ancestry import AncestryAnalysisModule
 from pangea_modules.ancestry_data.factory import create_values
 
 
