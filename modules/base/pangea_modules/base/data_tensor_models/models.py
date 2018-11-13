@@ -36,11 +36,11 @@ class MongoWrapperModel(DataModel):
         """Return the stored model."""
         return self.model
 
-    def from_son(self, son):
+    def from_son(self, son):  # pylint: disable=no-self-use
         """Return the SON as is."""
         return son
 
-    def promote(self, observations):
+    def promote(self, observations):  # pylint: disable=no-self-use
         """Return observations as is."""
         return observations
 
