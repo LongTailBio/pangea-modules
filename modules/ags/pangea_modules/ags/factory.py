@@ -5,7 +5,9 @@
 import factory
 
 from pangea_modules.base.models import DistributionResult
-from pangea_modules.ags.models import AGSResult
+from pangea_modules.ags.models import AGSAnalysisModule
+
+AGSResult = AGSAnalysisModule.result_model()
 
 
 class DistributionFactory(factory.mongoengine.MongoEngineFactory):

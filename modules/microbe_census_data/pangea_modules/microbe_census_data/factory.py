@@ -5,7 +5,9 @@
 import random
 import factory
 
-from pangea_modules.microbe_census_data import MicrobeCensusResult
+from pangea_modules.microbe_census_data import MicrobeCensusResultModule
+
+MicrobeCensusResult = MicrobeCensusResultModule.result_model()
 
 
 def create_values():

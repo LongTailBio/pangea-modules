@@ -5,8 +5,10 @@
 from random import random
 import factory
 
-from pangea_modules.ancestry_data import AncestryToolResult
+from pangea_modules.ancestry_data import AncestryToolResultModule
 from pangea_modules.ancestry_data.constants import KNOWN_LOCATIONS
+
+AncestryToolResult = AncestryToolResultModule.result_model()
 
 
 def create_values(dropout=0.25):

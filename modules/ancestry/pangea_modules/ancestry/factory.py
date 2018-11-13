@@ -5,8 +5,10 @@
 import factory
 from pandas import DataFrame
 
-from pangea_modules.ancestry.models import AncestryResult
+from pangea_modules.ancestry.models import AncestryResultModule
 from pangea_modules.ancestry_data.factory import create_values
+
+AncestryResult = AncestryResultModule.result_model()
 
 
 def create_result():
