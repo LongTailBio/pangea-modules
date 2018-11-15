@@ -5,7 +5,7 @@
 import factory
 from pandas import DataFrame
 
-from pangea_modules.ancestry.models import AncestryResult
+from pangea_modules.ancestry import AncestryAnalysisModule
 from pangea_modules.ancestry_data.factory import create_values
 
 
@@ -25,7 +25,7 @@ class AncestryFactory(factory.mongoengine.MongoEngineFactory):
     class Meta:
         """Factory metadata."""
 
-        model = AncestryResult
+        model = AncestryAnalysisModule.result_model()
 
     @factory.lazy_attribute
     def samples(self):  # pylint: disable=no-self-use

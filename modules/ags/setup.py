@@ -2,7 +2,11 @@ from setuptools import setup
 
 microlib_name = 'pangea_modules.ags'
 
-requirements = ['pangea_modules.base', 'pangea_modules.microbe_census_data', 'mongoengine']
+requirements = [
+    'pangea_modules.base',
+    'pangea_modules.microbe_census_data',
+    'mongoengine',
+]
 
 setup(
     name=microlib_name,

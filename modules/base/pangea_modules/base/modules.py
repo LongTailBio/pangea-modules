@@ -1,7 +1,5 @@
 """AnalysisModule classes."""
 
-import pandas as pd
-
 from .exceptions import UnsupportedAnalysisMode
 
 
@@ -17,8 +15,17 @@ class AnalysisModule:
         """Return module's unique identifier string."""
         raise NotImplementedError()
 
+    @classmethod
+    def result_model(cls):
+        """Return a model that can be used with the database engine."""
+        model = cls.data_model()
+        try:
+            return model.get_document_class()
+        except AttributeError:
+            return model
+
     @staticmethod
-    def result_model():
+    def data_model():
         """Return data model class for AnalysisModule type."""
         raise NotImplementedError()
 
@@ -69,29 +76,10 @@ class AnalysisModule:
         raise UnsupportedAnalysisMode
 
     @classmethod
-    def promote_scalars(cls, samples):
-        """Return the promoted form of all scalars as a pandas series."""
-        return {
-            scalar_var: pd.Series({
-                sample['name']: sample[cls.name()][scalar_var]
-                for sample in samples
-            })
-            for scalar_var in cls.result_model().scalar_variables()
-        }
-
-    @classmethod
-    def promote_vectors(cls, samples, normalize_rows=False, extractor=lambda x: x):
-        """Return the promoted form of all vectors as a pandas dataframe."""
-        all_vars = {}
-        for vector_var in cls.result_model().vector_variables():
-            data_tbl = pd.DataFrame.from_dict({
-                sample['name']: {
-                    feature: extractor(val)
-                    for feature, val in sample[cls.name()][vector_var].items()
-                }
-                for sample in samples
-            }, orient='index')
-            if normalize_rows:
-                data_tbl = data_tbl.div(data_tbl.sum(axis=1), axis=0)
-            all_vars[vector_var] = data_tbl
-        return all_vars
+    def promote_data(cls, samples):
+        """Return the promoted data."""
+        sample_tbl = {sample['name']: sample[cls.name()] for sample in samples}
+        try:
+            return cls.result_model().promote(sample_tbl)
+        except AttributeError:
+            return sample_tbl

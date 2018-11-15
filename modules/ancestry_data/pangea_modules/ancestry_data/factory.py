@@ -5,7 +5,7 @@
 from random import random
 import factory
 
-from pangea_modules.ancestry_data import AncestryToolResult
+from pangea_modules.ancestry_data import AncestryResultModule
 from pangea_modules.ancestry_data.constants import KNOWN_LOCATIONS
 
 
@@ -24,7 +24,7 @@ def create_values(dropout=0.25):
 def create_result(dropout=0.25):
     """Create ancestry result."""
     pops = create_values(dropout=dropout)
-    ancestry_result = AncestryToolResult(populations=pops)
+    ancestry_result = AncestryResultModule.result_model()(populations=pops)
     return ancestry_result
 
 
@@ -34,7 +34,7 @@ class AncestryToolResultFactory(factory.mongoengine.MongoEngineFactory):
     class Meta:
         """Factory metadata."""
 
-        model = AncestryToolResult
+        model = AncestryResultModule.result_model()
 
     @factory.lazy_attribute
     def populations(self):

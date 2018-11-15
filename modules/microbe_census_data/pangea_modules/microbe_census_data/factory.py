@@ -5,7 +5,7 @@
 import random
 import factory
 
-from pangea_modules.microbe_census_data import MicrobeCensusResult
+from pangea_modules.microbe_census_data import MicrobeCensusResultModule
 
 
 def create_values():
@@ -21,7 +21,7 @@ def create_values():
 def create_result(save=False):
     """Create MicrobeCensusResult with specified number of taxa."""
     packaged_values = create_values()
-    result = MicrobeCensusResult(**packaged_values)
+    result = MicrobeCensusResultModule.result_model()(**packaged_values)
     if save:
         result.save()
     return result
@@ -33,7 +33,7 @@ class MicrobeCensusResultFactory(factory.mongoengine.MongoEngineFactory):
     class Meta:
         """Factory metadata."""
 
-        model = MicrobeCensusResult
+        model = MicrobeCensusResultModule.result_model()
 
     @factory.lazy_attribute
     def average_genome_size(self):

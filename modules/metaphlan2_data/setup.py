@@ -2,7 +2,10 @@ from setuptools import setup
 
 microlib_name = 'pangea_modules.metaphlan2_data'
 
-requirements = ['pangea_modules.base', 'mongoengine']
+requirements = [
+    'pangea_modules.base',
+    'mongoengine',
+]
 
 setup(
     name=microlib_name,

@@ -1,9 +1,12 @@
 """Kraken tool module."""
 
 from pangea_modules.base import AnalysisModule
-
+from pangea_modules.base.data_tensor_models import (
+    ScalarModel,
+    VectorModel,
+    FixedGroupModel,
+)
 from .constants import MODULE_NAME
-from .models import KrakenHLLResult
 
 
 class KrakenHLLResultModule(AnalysisModule):
@@ -15,9 +18,11 @@ class KrakenHLLResultModule(AnalysisModule):
         return MODULE_NAME
 
     @classmethod
-    def result_model(cls):
+    def data_model(cls):
         """Return Kraken module's model class."""
-        return KrakenHLLResult
+        return FixedGroupModel(
+            taxa=VectorModel(ScalarModel(float, domain=(0, 100))),
+        )
 
     @classmethod
     def upload_hooks(cls):

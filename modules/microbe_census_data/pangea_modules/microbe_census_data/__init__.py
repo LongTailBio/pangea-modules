@@ -1,36 +1,10 @@
 """Microbe Census tool module."""
 
-from mongoengine import ValidationError, FloatField, IntField, EmbeddedDocument
-
 from pangea_modules.base import AnalysisModule
-
-
-class MicrobeCensusResult(EmbeddedDocument):  # pylint: disable=too-few-public-methods
-    """Mic Census tool's result type."""
-
-    average_genome_size = FloatField(required=True)
-    total_bases = IntField(required=True)
-    genome_equivalents = FloatField(required=True)
-
-    def clean(self):
-        """Check all values are non-negative, if not raise an error."""
-        def validate(*vals):
-            """Check vals are non-negative, return a bool."""
-            for val in vals:
-                if val is not None and val < 0:
-                    return False
-            return True
-
-        if not validate(self.average_genome_size,
-                        self.total_bases,
-                        self.genome_equivalents):
-            msg = 'MicrobeCensusResult values must be non-negative'
-            raise ValidationError(msg)
-
-    @classmethod
-    def scalar_variables(cls):
-        """Return names of scalar variables."""
-        return ['average_genome_size', 'genome_equivalents']
+from pangea_modules.base.data_tensor_models import (
+    ScalarModel,
+    FixedGroupModel,
+)
 
 
 class MicrobeCensusResultModule(AnalysisModule):
@@ -42,6 +16,10 @@ class MicrobeCensusResultModule(AnalysisModule):
         return 'microbe_census'
 
     @classmethod
-    def result_model(cls):
+    def data_model(cls):
         """Return Microbe Census module's model class."""
-        return MicrobeCensusResult
+        return FixedGroupModel(
+            average_genome_size=ScalarModel(domain=(0, None)),
+            total_bases=ScalarModel(dtype=int, domain=(0, None)),
+            genome_equivalents=ScalarModel(domain=(0, None)),
+        )

@@ -5,7 +5,7 @@
 import factory
 
 from pangea_modules.base.models import DistributionResult
-from pangea_modules.ags.models import AGSResult
+from pangea_modules.ags import AGSAnalysisModule
 
 
 class DistributionFactory(factory.mongoengine.MongoEngineFactory):
@@ -29,7 +29,7 @@ class AGSFactory(factory.mongoengine.MongoEngineFactory):
     class Meta:
         """Factory metadata."""
 
-        model = AGSResult
+        model = AGSAnalysisModule.result_model()
 
     @factory.lazy_attribute
     def categories(self):  # pylint: disable=no-self-use
