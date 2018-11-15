@@ -20,9 +20,10 @@ class AnalysisModule:
     def result_model(cls):
         """Return a model that can be used with the database engine."""
         model = cls.data_model()
-        if isinstance(model, DataModel):
+        try:
             return model.get_document_class()
-        return model
+        except AttributeError:
+            return model
 
     @staticmethod
     def data_model():
@@ -79,6 +80,7 @@ class AnalysisModule:
     def promote_data(cls, samples):
         """Return the promoted data."""
         sample_tbl = {sample['name']: sample[cls.name()] for sample in samples}
-        if not isinstance(cls, DataModel):
+        try:
+            return cls.result_model().promote(sample_tbl)
+        except AttributeError:
             return sample_tbl
-        return cls.result_model().promote(sample_tbl)

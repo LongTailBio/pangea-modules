@@ -5,7 +5,7 @@ import mongoengine as mdb
 from .utils import flip_nested_dict
 
 
-class ModelError(Exception):
+class TensorTypeError(TypeError):
     """Represent an error with a model."""
     pass
 
@@ -23,6 +23,10 @@ class DataModel:
 
     def from_son(self, son):  # pylint: disable=no-self-use
         """Return an instantiated data type from SON input."""
+        raise NotImplementedError()
+
+    def promote(self, observations):  # pylint: disable=no-self-use
+        """Return a promoted version of this model."""
         raise NotImplementedError()
 
 

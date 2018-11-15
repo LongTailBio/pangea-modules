@@ -21,5 +21,5 @@ class MicrobeCensusResultModule(AnalysisModule):
         return FixedGroupModel(
             average_genome_size=ScalarModel(domain=(0, None)),
             total_bases=ScalarModel(dtype=int, domain=(0, None)),
-            genome_equivalents=ScalarModel(domain=(0, None))
+            genome_equivalents=ScalarModel(domain=(0, None)),
         )
