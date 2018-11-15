@@ -3,7 +3,7 @@ import mongoengine as mdb
 
 from pangea_modules.base.data_tensors import Vector
 
-from .models import DataModel, ModelError
+from .models import DataModel, TensorTypeError
 
 
 class Tensor0Model:  # pylint: disable=too-few-public-methods
@@ -27,7 +27,7 @@ class ScalarModel(DataModel, Tensor0Model):
             return mdb.FloatField(min_val=self.min_val, max_val=self.max_val)
         if self.dtype is int:
             return mdb.IntField(min_val=self.min_val, max_val=self.max_val)
-        raise ModelError(f'data type {self.dtype} not available.')
+        raise TensorTypeError(f'data type {self.dtype} not available.')
 
     def from_son(self, son):
         """Return int or float as appropriate."""
@@ -52,3 +52,7 @@ class CategoricalModel(DataModel, Tensor0Model):
     def from_son(self, son):  # pylint: disable=no-self-use
         """Return the string."""
         return son
+
+    def promote(self, observations):  # pylint: disable=no-self-use
+        """Return the input."""
+        return observations

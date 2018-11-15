@@ -1,6 +1,5 @@
 """AnalysisModule classes."""
 
-from .data_tensor_models import DataModel
 from .exceptions import UnsupportedAnalysisMode
 
 

@@ -61,7 +61,7 @@ class FixedGroupModel(DataModel):
         self.dtypes = dtypes
         for val in self.dtypes.values():
             if model and not isinstance(val, model):
-                raise ModelError()
+                raise TensorTypeError()
 
     def get_document_class(self):
         """Return an anonymous Field Class with subfields as specified."""
