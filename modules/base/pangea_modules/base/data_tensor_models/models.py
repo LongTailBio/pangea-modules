@@ -101,23 +101,23 @@ class UnlimitedGroupModel(DataModel):
     Parameters may be named (dict) or numbered (list).
     """
 
-    def __init__(self, dtype: DataModel, indexed=True, return_type=None, allowed_keys=None):
+    def __init__(self, dtype: DataModel, named_indices=True, return_type=None, allowed_keys=None):
         super()
-        self.indexed = indexed
+        self.named_indices = named_indices
         self.return_type = return_type
         self.dtype = dtype
-        self.allowed_keys = allowed_keys  # doesn't do anything yet
+        self.allowed_keys = allowed_keys  # doesn't do anything yet, will limit keys
 
     def get_document_class(self):
         """Return a Map or List Field as appropriate."""
         sub_class = self.dtype.get_document_class()
-        if self.indexed:
+        if self.named_indices:
             return mdb.MapField(field=sub_class)
         return mdb.ListField(field=sub_class)
 
     def from_son(self, son):
         """Return a dict or list with sub objects as appropriate."""
-        if self.indexed:
+        if self.named_indices:
             recursed = {key: self.dtype.from_son(val) for key, val in son.items()}
         else:
             recursed = [self.dtype.from_son(val) for val in son]

@@ -1,4 +1,5 @@
 """Represent atomic variables."""
+
 import mongoengine as mdb
 
 from pangea_modules.base.data_tensors import Vector
@@ -12,7 +13,11 @@ class Tensor0Model:  # pylint: disable=too-few-public-methods
 
 
 class ScalarModel(DataModel, Tensor0Model):
-    """Represent a number."""
+    """Represent a number.
+
+    Can have a domain represented as a tuple of (min, max).
+    Either min or max can be None for open ranges.
+    """
 
     def __init__(self, dtype=float, domain=None):
         super()

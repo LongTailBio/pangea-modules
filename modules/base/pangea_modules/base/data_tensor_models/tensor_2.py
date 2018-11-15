@@ -1,4 +1,5 @@
 """Represent models 2 steps from atomic."""
+
 from pangea_modules.base.data_tensors import Vector, Matrix
 
 from .models import UnlimitedGroupModel
@@ -15,16 +16,17 @@ class Tensor2Model:  # pylint: disable=too-few-public-methods
 class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few-public-methods
     """Represent a mathematical matrix to the db."""
 
-    def __init__(self, dtype: Tensor0Model,
-                 row_indexed=True, col_indexed=True, allowed_keys=None):
+    def __init__(self, *args, named_row_indices=True, named_col_indices=True, **kwargs):
         super().__init__(
-            VectorModel(dtype, indexed=row_indexed),
-            indexed=col_indexed, return_type=Matrix, allowed_keys=allowed_keys,
+            *args,
+            VectorModel(dtype, named_indices=named_row_indices),
+            named_indices=named_col_indices,
+            **kwargs
         )
         if self.dtype in (int, float):
             self.dtype = ScalarModel(dtype=self.dtype)
 
-    def promote(self, observations): # pylint: disable=no-self-use
+    def promote(self, observations):  # pylint: disable=no-self-use
         """Return a dictionary of matrices, one matrix for column."""
         flipped = flip_nested_dict(observations, recurse=True)
         promoted = {}
