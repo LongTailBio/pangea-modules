@@ -21,6 +21,7 @@ class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few
             *args,
             VectorModel(dtype, named_indices=named_row_indices),
             named_indices=named_col_indices,
+            return_type=Matrix,
             **kwargs
         )
         if self.dtype in (int, float):
