@@ -16,7 +16,7 @@ class Tensor2Model:  # pylint: disable=too-few-public-methods
 class MatrixModel(UnlimitedGroupModel, Tensor2Model):  # pylint: disable=too-few-public-methods
     """Represent a mathematical matrix to the db."""
 
-    def __init__(self, *args, named_row_indices=True, named_col_indices=True, **kwargs):
+    def __init__(self, dtype, *args, named_row_indices=True, named_col_indices=True, **kwargs):
         super().__init__(
             *args,
             VectorModel(dtype, named_indices=named_row_indices),

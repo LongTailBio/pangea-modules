@@ -101,7 +101,7 @@ class UnlimitedGroupModel(DataModel):
     Parameters may be named (dict) or numbered (list).
     """
 
-    def __init__(self, dtype: DataModel, named_indices=True, return_type=None, allowed_keys=None):
+    def __init__(self, dtype, named_indices=True, return_type=None, allowed_keys=None):
         super()
         self.named_indices = named_indices
         self.return_type = return_type
