@@ -23,7 +23,7 @@ class TestAverageGenomeSizeTasks(TestCase):
             return sample
 
         samples = [create_sample(i) for i in range(15)]
-        result = analysis_processor(samples)['distributions']
+        result = analysis_processor(*samples)['distributions']
         self.assertIn('foo', result)
         self.assertIn('bar0', result['foo'])
         self.assertIn('bar1', result['foo'])
