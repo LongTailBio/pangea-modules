@@ -64,7 +64,7 @@ class Vector(Tensor1):
 
     def percentile(self, *percentiles):
         """Return a vector of percentiles of the data."""
-        return Vector(np.percentile(self.data.values(), percentiles))
+        return Vector(np.percentile(list(self.data.values()), percentiles))
 
     def quartiles(self):
         """Return a Vector of length 5 for 0, 25, 50, 75, 100 percentiles."""

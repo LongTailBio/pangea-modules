@@ -20,7 +20,6 @@ def analysis_processor(*samples):
     def get_ags_dist(my_samples):
         """Return vector of quartiles of ave genome size."""
         promoted = MicrobeCensusResultModule.promote_data(my_samples)
-        print(promoted)
         ave_genome_size = promoted['average_genome_size']  # Vector of average genome sizes
         return ave_genome_size.quartiles()
 
