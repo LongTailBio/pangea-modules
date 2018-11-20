@@ -85,11 +85,11 @@ class FixedGroupModel(DataModel):
         """Return a promoted version of this group."""
         outer = {}
         if isinstance(observations, dict):
-            for key, dtype in self.dtypes:
+            for key, dtype in self.dtypes.items():
                 inner = {sample: observation[key] for sample, observation in observations.items()}
                 outer[key] = dtype.promote(inner)
         else:
-            for key, dtype in self.dtypes:
+            for key, dtype in self.dtypes.items():
                 inner = [observation[key] for observation in observations]
                 outer[key] = dtype.promote(inner)
         return outer
