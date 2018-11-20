@@ -80,6 +80,6 @@ class AnalysisModule:
         """Return the promoted data."""
         sample_tbl = {sample['name']: sample[cls.name()] for sample in samples}
         try:
-            return cls.result_model().promote(sample_tbl)
+            return cls.data_model().promote(sample_tbl)
         except AttributeError:
             return sample_tbl
