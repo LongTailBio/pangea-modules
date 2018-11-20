@@ -71,5 +71,6 @@ class Vector(Tensor1):
         return self.percentile(0, 25, 50, 75, 100)
 
     def num_non_zero(self, zero_thresh=0.00000000001):
-        vals = [val for val in self.values() if abs(val) < zero_thresh]
+        """Return the number of elements with value larger than <zero_thresh>."""
+        vals = [val for _, val in self.iter() if abs(val) < zero_thresh]
         return len(vals)
