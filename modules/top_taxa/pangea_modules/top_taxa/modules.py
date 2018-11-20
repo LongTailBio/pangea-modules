@@ -4,7 +4,7 @@ from pangea_modules.base import AnalysisModule
 from pangea_modules.base.data_tensor_models import (
     ScalarModel,
     FixedGroupModel,
-    UnlimitedGroupModel,
+    MapModel,
 )
 from pangea_modules.krakenhll_data import KrakenHLLResultModule
 from pangea_modules.metaphlan2_data import Metaphlan2ResultModule
@@ -25,9 +25,9 @@ class TopTaxaAnalysisModule(AnalysisModule):
     def data_model():
         """Return data model."""
         return FixedGroupModel(
-            categories=UnlimitedGroupModel(
-                UnlimitedGroupModel(
-                    UnlimitedGroupModel(
+            categories=MapModel(  # vals -> tool
+                MapModel(  # tool -> kingdom
+                    MapModel(  # kingdom -> abundance and prevalence
                         FixedGroupModel(
                             abundance=ScalarModel(domain=(0, 1)),
                             prevalence=ScalarModel(domain=(0, 1)),

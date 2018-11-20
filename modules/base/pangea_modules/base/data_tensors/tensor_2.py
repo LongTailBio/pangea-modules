@@ -52,6 +52,30 @@ class Matrix(Tensor2):
         for key, col in self.data.items():
             yield key, operator(col)
 
+    def operate_cols(self, operator):
+        """Return a dict with operator applied to each column."""
+        return dict(self.iter_cols(operator=operator))
+
+    def reduce_cols(self, operator):
+        """Return a Vector with operator applied to each column."""
+        return Vector(self.operate_cols(operator))
+
+    def apply_cols(self, operator):
+        """Return a Matrix with operator applied to each column."""
+        return Matrix(self.operate_cols(operator))
+
+    def filter_cols(self, test):
+        """Return a matrix with only columns where `test` returns True.
+
+        As input `test` is given a tuple of <column_name>, <vector>.
+        """
+        kept = {
+            col_name: col_vals
+            for col_name, col_vals in self.iter_cols()
+            if test(col_name, col_vals)
+        }
+        return Matrix(kept)
+
     def transposed(self):
         """Flip rows and columns of this matrix."""
         outer = {}
@@ -68,11 +92,38 @@ class Matrix(Tensor2):
         """Yield key, vector pairs for each row. Ineffecient."""
         return self.transposed().iter_cols(operator=operator)
 
+    def operate_rows(self, operator):
+        """Return a dict with operator applied to each row."""
+        return dict(self.iter_cols(operator=operator))
+
+    def reduce_rows(self, operator):
+        """Return a Vector with operator applied to each row."""
+        return Vector(self.operate_rows(operator))
+
+    def apply_rows(self, operator):
+        """Return a Matrix with operator applied to each row."""
+        return Matrix(self.operate_rows(operator)).transposed()
+
+    def filter_rows(self, test):
+        """Return a matrix with only columns where `test` returns True.
+
+        As input `test` is given a tuple of <column_name>, <vector>.
+        """
+        kept = {
+            col_name: col_vals
+            for col_name, col_vals in self.transposed().iter_cols()
+            if test(col_name, col_vals)
+        }
+        return Matrix(kept).transposed()
+
     def col_means(self):
         """Return a vector with the means of each column."""
-        data = dict(self.iter_cols(operator=lambda col: col.mean()))
-        return Vector(data)
+        return self.operate_cols(lambda col: col.mean())
 
     def row_means(self):
         """Return a vector with means for each row."""
         return self.transposed().col_means()
+
+    def compositional_rows(self):
+        """Return a Matrix where each row sums to 1."""
+        return self.apply_rows(lambda row: row.as_compositional())

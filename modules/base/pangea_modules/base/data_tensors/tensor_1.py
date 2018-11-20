@@ -69,3 +69,7 @@ class Vector(Tensor1):
     def quartiles(self):
         """Return a Vector of length 5 for 0, 25, 50, 75, 100 percentiles."""
         return self.percentile(0, 25, 50, 75, 100)
+
+    def num_non_zero(self, zero_thresh=0.00000000001):
+        vals = [val for val in self.values() if abs(val) < zero_thresh]
+        return len(vals)
