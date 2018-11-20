@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-from pangea_modules.ags.analysis import ags_distributions
+from pangea_modules.ags.modules import analysis_processor
 from pangea_modules.microbe_census_data.factory import create_values
 
 
@@ -23,8 +23,8 @@ class TestAverageGenomeSizeTasks(TestCase):
             return sample
 
         samples = [create_sample(i) for i in range(15)]
-        result = ags_distributions(samples)
+        result = analysis_processor(samples)['distributions']
         self.assertIn('foo', result)
         self.assertIn('bar0', result['foo'])
         self.assertIn('bar1', result['foo'])
-        self.assertIn('min_val', result['foo']['bar0'])
+        self.assertEqual(5, len(result['foo']['bar0']))
