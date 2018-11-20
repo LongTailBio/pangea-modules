@@ -125,3 +125,42 @@ def categories_from_metadata(samples, min_size=2):
                   if len(category_values) >= min_size}
 
     return categories
+
+
+def group_samples_by_metadata(samples, min_size=2, group_apply=lambda x: x):
+    """
+    Create dict of categories, their values and samples from sample metadata.
+
+    Parameters
+    ----------
+    samples : list
+        List of sample models.
+    min_size: int
+        Minimum number of values required for a given metadata item to
+        be included in returned categories.
+    group_apply: function
+        Function to apply to each group of samples
+
+    Returns
+    -------
+    tuple of
+    dict
+        Dictionary of form {<category_name>: [category_value[, category_value]]}
+    dict
+        Dictionary of form {
+            <category_name>: {
+                category_value: [sample[, sample]]
+            }
+        }
+    """
+    categories = categories_from_metadata(samples, min_size=min_size)
+    grouped_samples = {}
+    for category_name, category_values in categories.items():
+        grouped_samples[category_name] = {}
+        for cat_val in category_values:
+            grouped_samples[category_name][cat_val] = group_apply([
+                sample
+                for sample in samples
+                if sample['metadata'][category_name] == cat_val
+            ])
+    return categories, grouped_samples

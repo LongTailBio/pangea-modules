@@ -1,6 +1,6 @@
 """Represent tensors that contain atomic tensors."""
 import pandas as pd
-
+import numpy as np
 
 class Tensor1:  # pylint: disable=too-few-public-methods
     """Represent a group of atomic data."""
@@ -61,3 +61,11 @@ class Vector(Tensor1):
         """Return a vector proportional to this one that sums to 1."""
         my_sum = self.sum()
         return Vector({key: val / my_sum for key, val in self.data.items()})
+
+    def percentile(self, *percentiles):
+        """Return a vector of percentiles of the data."""
+        return Vector(np.percentile(self.data.values(), percentiles))
+
+    def quartiles(self):
+        """Return a Vector of length 5 for 0, 25, 50, 75, 100 percentiles."""
+        return self.percentile(0, 25, 50, 75, 100)
