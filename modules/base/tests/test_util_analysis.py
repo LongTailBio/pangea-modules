@@ -52,20 +52,3 @@ class TestDisplayModuleUtilityTasks(TestCase):
         self.assertIn('valid_category', result)
         self.assertIn('foo', result['valid_category'])
         self.assertIn('baz', result['valid_category'])
-
-    def test_collate_samples(self):
-        """Ensure collate_samples task works."""
-        sample1 = {
-            'name': 'Sample01',
-            KRAKEN_NAME: krakenhll_factory.create_result(),
-        }
-        sample2 = {
-            'name': 'Sample02',
-            KRAKEN_NAME: krakenhll_factory.create_result(),
-        }
-        samples = [sample1, sample2]
-        result = collate_samples(KRAKEN_NAME, ['taxa'], samples)
-        self.assertIn('Sample01', result)
-        self.assertIn('Sample02', result)
-        self.assertIn('taxa', result['Sample01'])
-        self.assertIn('taxa', result['Sample02'])
