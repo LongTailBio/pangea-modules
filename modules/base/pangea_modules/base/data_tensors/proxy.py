@@ -1,7 +1,9 @@
 """Proxy class copied from http://code.activestate.com/recipes/496741-object-proxying/."""
 
 
-class Proxy(object):
+class Proxy:
+    """Flow through methods to another object."""
+
     __slots__ = ["_obj", "__weakref__"]
 
     def __init__(self, obj):

@@ -25,4 +25,5 @@ class Vector(VectorProcessing, Tensor1):
     """Represent a sequence of numerical scalars."""
 
     def __init__(self, data):
+        super().__init__(self, data)
         self.data = pd.Series(data)
