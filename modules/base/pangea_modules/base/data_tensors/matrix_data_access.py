@@ -43,17 +43,17 @@ class MatrixAccess:
             return [key for key, _ in val.iter()]
         return []
 
+    def as_dict(self):
+        """Return this matrix as a dict."""
+        return {key: val.as_dict() for key, val in self.data.items()}
+
     def as_pandas(self):
         """Return this matrix as a pandas dataframe."""
-        return pd.DataFrame.from_dict(self.data)
+        return pd.DataFrame.from_dict({str(key): val for key, val in self.as_dict().items()})
 
     def as_numpy(self):
         """Return this matrix as a numpy matrix."""
         return self.as_pandas().as_matrix()
-
-    def as_dict(self):
-        """Return this matrix as a dict."""
-        return self.data
 
     def iter_cols(self, operator=lambda x: x):
         """Yield tuples of key, vectors one for each col."""

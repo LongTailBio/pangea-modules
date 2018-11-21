@@ -17,7 +17,11 @@ class VectorAccess:
 
     def as_pandas(self):
         """Return a pandas series based on this vector."""
-        return pd.Series.from_dict(self.data)
+        return pd.Series.from_dict({str(key): val for key, val in self.data.items()})
+
+    def as_dict(self):
+        """Return this vector as a dict."""
+        return self.data
 
     def iter(self):
         """Yield tuples of key, value."""
