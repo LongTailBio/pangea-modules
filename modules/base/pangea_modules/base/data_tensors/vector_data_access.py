@@ -2,8 +2,10 @@
 
 import pandas as pd
 
+from .proxy import Proxy
 
-class VectorAccess:
+
+class VectorAccess(Proxy):
     """Represent a sequence of numerical scalars."""
 
     data = pd.Series()
