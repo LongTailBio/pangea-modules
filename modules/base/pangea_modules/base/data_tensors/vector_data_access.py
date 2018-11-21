@@ -9,7 +9,7 @@ class VectorAccess(pd.Series):  # pylint disable=too-many-ancestors
     """Represent a sequence of numerical scalars."""
 
     def __getattribute__(self, key):
-        my_attr = getattr(self, key)
+        my_attr = object.__getattribute__(self, key)
 
         def wrapit(*args, **kwargs):
             """Intercept calls to pandas functions and conver to vectors."""
