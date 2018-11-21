@@ -84,13 +84,6 @@ default_test: &default_test
         key: v1-dependencies-{{ .Environment.CIRCLE_JOB }}-{{ epoch }}
 
     - run:
-        name: Lint module
-        command: |
-          . venv/bin/activate
-          cd modules/$MODULE_NAME
-          pylint pangea_modules/$MODULE_NAME tests
-
-    - run:
         name: Run tests
         command: |
           set +e
