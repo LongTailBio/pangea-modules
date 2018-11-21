@@ -5,8 +5,10 @@ import pandas as pd
 from .tensor_1 import Vector
 
 
-class MatrixAccess:  # pylint: disable=no-member
+class MatrixAccess:
     """Handle all data access fucntions for Matrix class."""
+
+    data = None
 
     def __getitem__(self, key):
         return self.data[key]

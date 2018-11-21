@@ -5,7 +5,7 @@ from sklearn.manifold import TSNE
 from .matrix_data_access import MatrixAccess
 
 
-class MatrixProcessing(MatrixAccess):  # pylint: disable=no-member
+class MatrixProcessing(MatrixAccess):
     """Represent an unlimited group of vectors."""
 
     def col_means(self):
@@ -35,7 +35,7 @@ class MatrixProcessing(MatrixAccess):  # pylint: disable=no-member
         tsne_result = TSNE(**params).fit_transform(self.as_numpy())
         rownames, colnames = self.rownames(), self.colnames()
         new_data = {}
-        for col_ind in range(n_components):
+        for col_ind in range(params['n_components']):
             new_data[colnames[col_ind]] = {
                 rownames[row_ind]: tsne_result[row_ind][col_ind]
                 for row_ind in range(self.nrows())

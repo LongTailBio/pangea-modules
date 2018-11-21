@@ -5,7 +5,7 @@ import numpy as np
 from .vector_data_access import VectorAccess
 
 
-class VectorProcessing(VectorAccess):  # pylint: disable=no-member
+class VectorProcessing(VectorAccess):
     """Represent a sequence of numerical scalars."""
 
     def sum(self):
@@ -18,7 +18,7 @@ class VectorProcessing(VectorAccess):  # pylint: disable=no-member
 
     def median(self):
         """Return the median value of this vector."""
-        vals = list(self.data.values())
+        vals = list(self.data.values())  # pylint: disable=no-member
         vals = sorted(vals)
         if len(vals) % 2 == 0:
             ind = len(vals) // 2
@@ -32,7 +32,7 @@ class VectorProcessing(VectorAccess):  # pylint: disable=no-member
 
     def percentile(self, *percentiles):
         """Return a vector of percentiles of the data."""
-        return type(self)(np.percentile(list(self.data.values()), percentiles))
+        return type(self)(np.percentile(list(self.data.values()), percentiles))  # pylint: disable=no-member
 
     def quartiles(self):
         """Return a Vector of length 5 for 0, 25, 50, 75, 100 percentiles."""
