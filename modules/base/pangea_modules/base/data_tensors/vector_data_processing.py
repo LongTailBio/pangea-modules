@@ -15,7 +15,7 @@ class VectorProcessing(VectorAccess):
 
     def percentile(self, *percentiles):
         """Return a vector of percentiles of the data."""
-        return type(self)(np.percentile(self, percentiles))  # pylint: disable=no-member
+        return type(self)(np.percentile(self.values, percentiles))  # pylint: disable=no-member
 
     def quartiles(self):
         """Return a Vector of length 5 for 0, 25, 50, 75, 100 percentiles."""

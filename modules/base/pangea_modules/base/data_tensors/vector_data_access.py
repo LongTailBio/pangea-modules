@@ -9,19 +9,16 @@ class VectorAccess:
     data = pd.Series()
 
     def __getattr__(self, key):
-        try:
-            pd_attr = self.data.key
+        pd_attr = self.data.key
 
-            def wrapit(*args, **kwargs):
-                """Intercept calls to pandas functions and conver to vectors."""
-                pd_val = pd_attr(*args, **kwargs)
-                if isinstance(pd_val, pd.Series):
-                    return type(self)(pd_val)
-                return pd_val
+        def wrapit(*args, **kwargs):
+            """Intercept calls to pandas functions and conver to vectors."""
+            pd_val = pd_attr(*args, **kwargs)
+            if isinstance(pd_val, pd.Series):
+                return type(self)(pd_val)
+            return pd_val
 
-            return wrapit
-        except AttributeError:
-            raise
+        return wrapit
 
     def __getitem__(self, key):
         return self.data[key]
