@@ -9,7 +9,7 @@ class VectorAccess:
     data = pd.Series()
 
     def __getattr__(self, key):
-        pd_attr = self.data.key
+        pd_attr = getattr(self.data, key)
 
         def wrapit(*args, **kwargs):
             """Intercept calls to pandas functions and conver to vectors."""
