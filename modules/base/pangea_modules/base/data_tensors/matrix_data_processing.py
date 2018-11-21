@@ -14,7 +14,7 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
 
     def row_means(self):
         """Return a vector with means for each row."""
-        return self.transposed().col_means()
+        return self.transposed().col_means()  # pylint disable=no-member
 
     def compositional_rows(self):
         """Return a Matrix where each row sums to 1."""

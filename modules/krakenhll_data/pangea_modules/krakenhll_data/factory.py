@@ -8,12 +8,10 @@ from pangea_modules.base.utils.factory import create_taxa_values
 from pangea_modules.krakenhll_data import KrakenHLLResultModule
 
 
-def create_result(taxa_count=10, save=False):
+def create_result(taxa_count=10):
     """Create KrakenHLL Result with specified number of taxa."""
     taxa = create_taxa_values(taxa_count=taxa_count)
-    result = KrakenHLLResultModule.data_model(taxa=taxa)
-    if save:
-        result.save()
+    result = KrakenHLLResultModule.data_model()(taxa=taxa)
     return result
 
 
