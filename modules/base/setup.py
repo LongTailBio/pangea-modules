@@ -2,7 +2,12 @@ from setuptools import setup
 
 microlib_name = 'pangea_modules.base'
 
-requirements = ['numpy', 'pandas', 'mongoengine']
+requirements = [
+    'numpy',
+    'pandas',
+    'mongoengine',
+    'sklearn',
+]
 
 setup(
     name=microlib_name,

@@ -5,7 +5,7 @@ import numpy as np
 from .vector_data_access import VectorAccess
 
 
-class VectorProcessing(VectorAccess):
+class VectorProcessing(VectorAccess):  # pylint: disable=no-member
     """Represent a sequence of numerical scalars."""
 
     def sum(self):

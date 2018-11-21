@@ -3,7 +3,7 @@
 import pandas as pd
 
 
-class VectorAccess:
+class VectorAccess:  # pylint: disable=no-member
     """Represent a sequence of numerical scalars."""
 
     def __getitem__(self, key):

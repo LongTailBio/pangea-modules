@@ -28,7 +28,7 @@ class SampleSimilarityAnalysisModule(AnalysisModule):
         """Return data model for Sample Similarity type."""
         return FixedGroupModel(
             categories=MapModel(ListModel(CategoricalModel())),
-            tools=MapModel(MatrixModel()),
+            tools=MapModel(MatrixModel(float)),
             data_records=MapModel(MapModel()),
         )
 

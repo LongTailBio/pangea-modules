@@ -15,7 +15,7 @@ def taxa_tool_tsne(samples, tool):
     return taxa_tsne
 
 
-def sample_similarity_reducer(*samples):
+def processor(*samples):
     """Combine Sample Similarity components."""
     kraken_tsne = taxa_tool_tsne(samples, KrakenHLLResultModule)
     mphlan_tsne = taxa_tool_tsne(samples, Metaphlan2ResultModule)
