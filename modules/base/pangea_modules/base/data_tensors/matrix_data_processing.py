@@ -10,7 +10,7 @@ class MatrixProcessing(MatrixAccess):
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        return self.operate_cols(lambda col: col.mean())
+        return self.reduce_cols(lambda col: col.mean())
 
     def row_means(self):
         """Return a vector with means for each row."""
