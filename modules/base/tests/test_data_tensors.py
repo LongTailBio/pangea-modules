@@ -87,3 +87,15 @@ class TestDataTensors(TestCase):
         transposed = matrix.transposed()
         self.assertEqual(transposed.ncols(), matrix.nrows())
         self.assertEqual(transposed.nrows(), matrix.ncols())
+
+    def test_matrix_tsne_returns_data(self):
+        matrix = Matrix(
+            {
+                'a': Vector([1, 2, 3]),
+                'b': Vector([4, 5, 6]),
+                'c': Vector([7, 8, 9]),
+                'd': Vector([3, 2, 1]),
+            }
+        )
+        tsne_out = matrix.tsne()
+        self.assertEqual((4, 2), tsne_out.shape())

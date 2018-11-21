@@ -24,6 +24,10 @@ class MatrixAccess:
             return val
         return 0
 
+    def shape(self):
+        """Return a tuple of nrows, ncols."""
+        return self.nrows(), self.ncols()
+
     def colnames(self):
         """Return a lsit of colnames."""
         return list(self.data.keys())

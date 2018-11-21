@@ -5,7 +5,8 @@ from .matrix_data_processing import MatrixProcessing
 
 class Tensor2:  # pylint: disable=too-few-public-methods
     """Represent a group of groups of atomic data."""
-    pass
+
+    dimensions = 2
 
 
 class VectorGroup(Tensor2):  # pylint: disable=too-few-public-methods
