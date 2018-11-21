@@ -32,7 +32,8 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
             'metric': 'euclidean',
         }
         params.update(kwargs)
-        tsne_result = TSNE(**params).fit_transform(self.as_numpy())
+        np_matrix = self.as_pandas().fillna(0).as_matrix()
+        tsne_result = TSNE(**params).fit_transform(np_matrix)
         rownames, colnames = self.rownames(), self.colnames()
         new_data = {}
         for col_ind in range(params['n_components']):
