@@ -103,4 +103,4 @@ class TestDataTensors(TestCase):
         )
         tsne_out = matrix.tsne()
         self.assertIsInstance(tsne_out, Matrix)
-        self.assertEqual((4, 2), tsne_out.shape())
+        self.assertEqual((3, 2), tsne_out.shape())

@@ -22,7 +22,7 @@ class TestSampleSimilarityTasks(TestCase):
             sample_data = {
                 'name': f'SMPL_{i}',
                 'library_uuid': uuid4(),
-                KRAKEN_NAME: create_result(save=False),
+                KRAKEN_NAME: create_result(),
             }
             return sample_data
 
