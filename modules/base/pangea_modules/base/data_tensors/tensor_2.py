@@ -1,5 +1,7 @@
 """Represent level 2 tensors."""
 import pandas as pd
+import numpy as np
+from sklearn.manifold import TSNE
 
 from .tensor_1 import Vector
 
@@ -43,9 +45,30 @@ class Matrix(Tensor2):
             return val
         return 0
 
+    def colnames(self):
+        """Return a lsit of colnames."""
+        return list(self.data.keys())
+
+    def rownames(self):
+        """Return a list of rownames."""
+        if not self.ncols():
+            return []
+        val = next(iter(self.data.values()))
+        if val:
+            return [key for key, _ in val.iter()]
+        return []
+
     def as_pandas(self):
         """Return this matrix as a pandas dataframe."""
         return pd.DataFrame.from_dict(self.data)
+
+    def as_numpy(self):
+        """Return this matrix as a numpy matrix."""
+        return self.as_pandas().as_matrix()
+
+    def as_dict(self):
+        """Return this matrix as a dict."""
+        return self.data
 
     def iter_cols(self, operator=lambda x: x):
         """Yield tuples of key, vectors one for each col."""
@@ -127,3 +150,26 @@ class Matrix(Tensor2):
     def compositional_rows(self):
         """Return a Matrix where each row sums to 1."""
         return self.apply_rows(lambda row: row.as_compositional())
+
+    def tsne(self,
+             n_components=2, perplexity=30, early_exaggeration=2, learning_rate=120,
+             n_iter=1000, min_grad_norm=1e-05, metric='euclidean', **kwargs):
+        """Run tSNE algorithm on array of features and return labeled results."""
+        params = {
+            'n_components': n_components,
+            'perplexity': perplexity,
+            'early_exaggeration': early_exaggeration,
+            'learning_rate': learning_rate,
+            'n_iter': n_iter,
+            'min_grad_norm': min_grad_norm,
+            'metric': metric,
+        }.update(kwargs)
+        tsne_result = TSNE(**params).fit_transform(self.as_numpy())
+        rownames, colnames = self.rownames(), self.colnames()
+        new_data = {}
+        for col_ind in range(n_components):
+            new_data[colnames[col_ind]] = {
+                rownames[row_ind]: tsne_result[row_ind][col_ind]
+                for row_ind in range(self.nrows())
+            }
+        return Matrix(new_data)
