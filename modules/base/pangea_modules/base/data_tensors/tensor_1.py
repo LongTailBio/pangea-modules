@@ -1,5 +1,7 @@
 """Represent tensors that contain atomic tensors."""
 
+import pandas as pd
+
 from .vector_data_processing import VectorProcessing
 
 
@@ -23,6 +25,4 @@ class Vector(VectorProcessing, Tensor1):
     """Represent a sequence of numerical scalars."""
 
     def __init__(self, data):
-        self.data = data
-        if isinstance(data, list):
-            self.data = {indvar: val for indvar, val in enumerate(data)}
+        self.data = pd.Series(data)
