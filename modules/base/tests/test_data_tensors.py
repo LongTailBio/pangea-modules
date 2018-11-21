@@ -92,6 +92,7 @@ class TestDataTensors(TestCase):
         self.assertEqual(transposed.nrows(), matrix.ncols())
 
     def test_matrix_tsne_returns_data(self):
+        """Test that TSNE returns data in the proper form."""
         matrix = Matrix(
             {
                 'a': Vector([1, 2, 3]),
