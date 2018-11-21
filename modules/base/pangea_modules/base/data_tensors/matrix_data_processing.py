@@ -12,7 +12,7 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
         """Return a vector with the means of each column."""
         return self.reduce_cols(lambda col: col.mean())
 
-    def row_means(self):
+    def row_means(self):  # pylint disable=no-member
         """Return a vector with means for each row."""
         return self.transposed().col_means()  # pylint disable=no-member
 

@@ -28,9 +28,6 @@ class TestSampleSimilarityTasks(TestCase):
 
         samples = [create_sample(i) for i in range(3)]
         taxa_tsne = taxa_tool_tsne(samples, KrakenHLLResultModule)
-        self.assertIn(f'{KRAKEN_NAME} tsne x', taxa_tsne.colnames())
-        self.assertIn(f'{KRAKEN_NAME} tsne y', taxa_tsne.colnames())
+        self.assertIn(f'{KRAKEN_NAME} tsne x', taxa_tsne)
+        self.assertIn(f'{KRAKEN_NAME} tsne y', taxa_tsne)
         self.assertEqual(taxa_tsne.shape(), (3, 2))
-        self.assertIn('SMPL_0', taxa_tsne.rownames())
-        self.assertIn('SMPL_1', taxa_tsne.rownames())
-        self.assertIn('SMPL_2', taxa_tsne.rownames())
