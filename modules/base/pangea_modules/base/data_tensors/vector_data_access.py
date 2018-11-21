@@ -3,17 +3,17 @@
 import pandas as pd
 
 
-class VectorAccess:
+class VectorAccess(pd.Series):
     """Represent a sequence of numerical scalars."""
 
     data = pd.Series()
 
-    def __getattr__(self, key):
-        pd_attr = getattr(self.data, key)
+    def __getattribute__(self, key):
+        my_attr = getattr(self.data, key)
 
         def wrapit(*args, **kwargs):
             """Intercept calls to pandas functions and conver to vectors."""
-            pd_val = pd_attr(*args, **kwargs)
+            pd_val = my_attr(*args, **kwargs)
             if isinstance(pd_val, pd.Series):
                 return type(self)(pd_val)
             return pd_val
