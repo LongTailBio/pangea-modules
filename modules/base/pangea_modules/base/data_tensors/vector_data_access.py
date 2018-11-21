@@ -1,3 +1,5 @@
+# pylint disable=too-many-ancestors
+
 """Access functionality for a vector."""
 
 import pandas as pd
