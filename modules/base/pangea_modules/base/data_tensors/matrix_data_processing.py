@@ -1,3 +1,5 @@
+# pylint disable=no-member
+
 """Handle data processing fucntionality for matrix class."""
 
 from sklearn.manifold import TSNE
