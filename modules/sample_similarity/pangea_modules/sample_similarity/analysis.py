@@ -8,7 +8,6 @@ from pangea_modules.metaphlan2_data import Metaphlan2ResultModule
 def taxa_tool_tsne(samples, tool):
     """Run tSNE for tool results stored as 'taxa' property."""
     axis_labels = [f'{tool.name()} tsne x', f'{tool.name()} tsne y']
-    print(tool.promote_data(samples))
     taxa_matrix = tool.promote_data(samples)['taxa']
     taxa_tsne = taxa_matrix.tsne()
     taxa_tsne = {axis_labels[i]: axis for i, axis in taxa_tsne.iter_cols()}

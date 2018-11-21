@@ -11,6 +11,7 @@ from pangea_modules.krakenhll_data import KrakenHLLResultModule
 def create_result(taxa_count=10):
     """Create KrakenHLL Result with specified number of taxa."""
     taxa = create_taxa_values(taxa_count=taxa_count)
+    print(KrakenHLLResultModule.__dict__)
     result = KrakenHLLResultModule.data_model().from_son({'taxa': taxa})
     return result
 

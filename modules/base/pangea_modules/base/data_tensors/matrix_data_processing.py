@@ -32,12 +32,12 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
             'metric': 'euclidean',
         }
         params.update(kwargs)
-        np_matrix = self.as_pandas().fillna(0).as_matrix()
+        np_matrix = self.as_pandas().fillna(0).values()
         tsne_result = TSNE(**params).fit_transform(np_matrix)
-        rownames, colnames = self.rownames(), self.colnames()
+        rownames = self.rownames()
         new_data = {}
         for col_ind in range(params['n_components']):
-            new_data[colnames[col_ind]] = {
+            new_data[col_ind] = {
                 rownames[row_ind]: tsne_result[row_ind][col_ind]
                 for row_ind in range(self.nrows())
             }

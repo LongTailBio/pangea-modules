@@ -53,7 +53,7 @@ class MatrixAccess:
 
     def as_numpy(self):
         """Return this matrix as a numpy matrix."""
-        return self.as_pandas().as_matrix()
+        return self.as_pandas().values()
 
     def iter_cols(self, operator=lambda x: x):
         """Yield tuples of key, vectors one for each col."""
