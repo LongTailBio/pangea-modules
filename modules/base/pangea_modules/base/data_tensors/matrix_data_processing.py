@@ -5,7 +5,7 @@ from sklearn.manifold import TSNE
 from .matrix_data_access import MatrixAccess
 
 
-class MatrixProcessing(MatrixAccess):
+class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
     """Represent an unlimited group of vectors."""
 
     def col_means(self):

@@ -6,7 +6,7 @@ import pandas as pd
 class VectorAccess:
     """Represent a sequence of numerical scalars."""
 
-    data = None
+    data = {}
 
     def __getitem__(self, key):
         return self.data[key]

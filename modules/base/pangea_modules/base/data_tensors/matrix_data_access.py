@@ -8,7 +8,7 @@ from .tensor_1 import Vector
 class MatrixAccess:
     """Handle all data access fucntions for Matrix class."""
 
-    data = None
+    data = {}
 
     def __getitem__(self, key):
         return self.data[key]
