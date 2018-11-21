@@ -3,7 +3,7 @@
 import pandas as pd
 
 
-class VectorAccess(pd.Series):
+class VectorAccess(pd.Series):  # pylint disable=too-many-ancestors
     """Represent a sequence of numerical scalars."""
 
     def __getattribute__(self, key):
