@@ -5,7 +5,6 @@ from unittest import TestCase
 
 from pangea_modules.base.utils import (
     categories_from_metadata,
-    collate_samples,
     relative_import,
 )
 
