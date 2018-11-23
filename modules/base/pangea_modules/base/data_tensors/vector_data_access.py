@@ -8,7 +8,8 @@ from .proxy import Proxy
 class VectorAccess(Proxy):
     """Represent a sequence of numerical scalars."""
 
-    data = pd.Series()
+    def __init__(self, obj):
+        super().__init__(obj)
 
     def __getattr__(self, key):
         pd_attr = getattr(self.data, key)
