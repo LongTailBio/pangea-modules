@@ -1,30 +1,14 @@
 """Access functionality for a vector."""
 
-import pandas as pd
-
 from .proxy import Proxy
 
 
 class VectorAccess(Proxy):
     """Represent a sequence of numerical scalars."""
 
-    def __init__(self, obj):
-        super().__init__(obj)
-
-    def __getattr__(self, key):
-        pd_attr = getattr(self.data, key)
-
-        def wrapit(*args, **kwargs):
-            """Intercept calls to pandas functions and conver to vectors."""
-            pd_val = pd_attr(*args, **kwargs)
-            if isinstance(pd_val, pd.Series):
-                return type(self)(pd_val)
-            return pd_val
-
-        return wrapit
-
-    def __getitem__(self, key):
-        return self.data[key]
+    def __init__(self, data):
+        super().__init__(data)
+        self.data = data
 
     def to_pandas(self):
         """Return a pandas series based on this vector."""

@@ -50,9 +50,7 @@ class Proxy:
         self.make_method = make_method_maker(type(self._obj), type(self))
 
     def __getattr__(self, key):
-        print(f'GETTINGATTRIBUTE {key}')
         pd_attr = getattr(self._obj, key)
-        print(f'GOT {pd_attr}')
         return self.make_method(pd_attr)
 
     def __delattr__(self, name):

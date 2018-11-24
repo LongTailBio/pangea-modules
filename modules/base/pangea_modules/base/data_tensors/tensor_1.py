@@ -3,7 +3,6 @@
 import pandas as pd
 
 from .vector_data_processing import VectorProcessing
-from .proxy import Proxy
 
 
 class Tensor1:  # pylint: disable=too-few-public-methods
@@ -22,29 +21,16 @@ class ScalarGroup(Tensor1):  # pylint: disable=too-few-public-methods
         return self.scalars[key]
 
 
-class Vector(Proxy, Tensor1):
+class Vector(VectorProcessing, Tensor1):
     """Represent a sequence of numerical scalars."""
 
     def __init__(self, data):
+        if not isinstance(data, pd.Series):
+            data = pd.Series(data)
         super().__init__(data)
-        self.data = data
+        self.data = self._obj
 
-    def to_pandas(self):
-        """Return a pandas series based on this vector."""
-        return self.data
-
-    def operate(self, operator):
-        """Return a vector with <operator> applied to each element."""
-        return type(self)({key: operator(val) for key, val in self.items()})
-
-    def reduce(self, operator):
-        """Return the function applied to the values in the vector.
-
-        Order of values is not guaranteed.
-        """
-        return operator(self.get_values())
-
-    @classmethod
-    def from_list(cls, data):
-        data = pd.Series(data)
-        return cls(data)
+    def __new__(cls, data, *args, **kwargs):
+        if not isinstance(data, pd.Series):
+            data = pd.Series(data)
+        return VectorProcessing.__new__(cls, data, *args, **kwargs)

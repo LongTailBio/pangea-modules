@@ -8,8 +8,9 @@ from .vector_data_access import VectorAccess
 class VectorProcessing(VectorAccess):
     """Represent a sequence of numerical scalars."""
 
-    def __init__(self, obj):
-        super().__init__(obj)
+    def __init__(self, data):
+        super().__init__(data)
+        self.data = data
 
     def as_compositional(self):
         """Return a vector proportional to this one that sums to 1."""
