@@ -24,7 +24,7 @@ class VectorAccess:
         return self.data
 
     def iter(self):
-        """Yield tuples of key, value."""
+        """Return a generator that yields tuples of key, value."""
         for key, val in self.data.items():
             yield key, val
 

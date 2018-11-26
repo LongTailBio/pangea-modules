@@ -42,8 +42,8 @@ class AGSAnalysisModule(AnalysisModule):
     def data_model():
         """Return data model class for Average Genome Size type."""
         return FixedGroupModel(
-            categories=MapModel(ListModel(CategoricalModel)),
-            distributions=MapModel(MapModel(VectorModel)),
+            categories=MapModel(ListModel(CategoricalModel)),  # List metadata categories with vals
+            distributions=MapModel(MapModel(VectorModel)),  # Map metadata to distributions
         )
 
     @staticmethod
