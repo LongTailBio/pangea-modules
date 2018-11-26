@@ -18,7 +18,7 @@ SPECIAL_METHOD_NAMES = [
 ]
 
 
-def make_method_maker(check_type, return_type):
+def make_method_maker(check_type, return_type, change_types={}):
     """Return a function that itself makes wrapped functions."""
 
     def make_method(func):
@@ -36,6 +36,8 @@ def make_method_maker(check_type, return_type):
             pd_val = func(*new_args, **kwargs)
             if isinstance(pd_val, check_type):
                 return return_type(pd_val)
+            if change_types and type(pd_val) in change_types:
+                return change_types[type(pd_val)](pd_val)
             return pd_val
 
         return wrap_func
@@ -45,9 +47,11 @@ def make_method_maker(check_type, return_type):
 class Proxy:
     """Flow through methods to another object."""
 
-    def __init__(self, obj):
+    def __init__(self, obj, change_types={}):
         self._obj = obj
-        self.make_method = make_method_maker(type(self._obj), type(self))
+        self.make_method = make_method_maker(
+            type(self._obj), type(self), change_types=change_types
+        )
 
     def __getattr__(self, key):
         pd_attr = getattr(self._obj, key)

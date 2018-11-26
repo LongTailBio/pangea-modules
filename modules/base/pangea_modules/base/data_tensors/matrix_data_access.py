@@ -3,74 +3,73 @@
 import pandas as pd
 
 from .tensor_1 import Vector
+from .proxy import Proxy
 
 
-class MatrixAccess:
+class MatrixAccess(Proxy):
     """Handle all data access fucntions for Matrix class."""
 
-    data = {}
-
-    def __getitem__(self, key):
-        return self.data[key]
+    def __init__(self, data):
+        super().__init__(data)
+        self.data = data
 
     def ncols(self):
         """Return the number of columns in this matrix."""
-        return len(self.data)
+        return self.shape[1]
 
     def nrows(self):
         """Return the number of rows in this matrix."""
-        if not self.ncols():
-            return 0
-        val = len(next(iter(self.data.values())))
-        if val:
-            return val
-        return 0
-
-    def shape(self):
-        """Return a tuple of nrows, ncols."""
-        return self.nrows(), self.ncols()
+        return self.shape[0]
 
     def colnames(self):
         """Return a lsit of colnames."""
-        return list(self.data.keys())
+        return self.columns
 
     def rownames(self):
         """Return a list of rownames."""
-        if not self.ncols():
-            return []
-        val = next(iter(self.data.values()))
-        if val:
-            return [key for key, _ in val.iter()]
-        return []
+        return self.index
 
-    def as_dict(self):
-        """Return this matrix as a dict."""
-        return {key: val.as_dict() for key, val in self.data.items()}
-
-    def as_pandas(self):
+    def to_pandas(self):
         """Return this matrix as a pandas dataframe."""
-        return pd.DataFrame.from_dict({str(key): val for key, val in self.as_dict().items()})
+        return self.data
 
-    def as_numpy(self):
+    def to_numpy(self):
         """Return this matrix as a numpy matrix."""
-        return self.as_pandas().values
+        return self.values
 
     def iter_cols(self, operator=lambda x: x):
         """Yield tuples of key, vectors one for each col."""
-        for key, col in self.data.items():
+        for key, col in self.iteritems():
             yield key, operator(col)
+
+    def iter_rows(self, operator=lambda x: x):
+        """Yield key, vector pairs for each row. Ineffecient."""
+        for key, row in self.iterrows():
+            yield key, operator(row)
 
     def operate_cols(self, operator):
         """Return a dict with operator applied to each column."""
         return dict(self.iter_cols(operator=operator))
 
+    def operate_rows(self, operator):
+        """Return a dict with operator applied to each row."""
+        return dict(self.iter_rows(operator=operator))
+
     def reduce_cols(self, operator):
         """Return a Vector with operator applied to each column."""
         return Vector(self.operate_cols(operator))
 
+    def reduce_rows(self, operator):
+        """Return a Vector with operator applied to each row."""
+        return Vector(self.operate_rows(operator))
+
     def apply_cols(self, operator):
         """Return a Matrix with operator applied to each column."""
-        return type(self)(self.operate_cols(operator))
+        return self.apply(operator, axis=1)
+
+    def apply_rows(self, operator):
+        """Return a Matrix with operator applied to each row."""
+        return self.apply(operator, axis=0)
 
     def filter_cols(self, test):
         """Return a matrix with only columns where `test` returns True.
@@ -84,34 +83,6 @@ class MatrixAccess:
         }
         return type(self)(kept)
 
-    def transposed(self):
-        """Flip rows and columns of this matrix."""
-        outer = {}
-        for col_name, row in self.data.items():
-            for row_name, val in row.iter():
-                try:
-                    outer[row_name][col_name] = val
-                except KeyError:
-                    outer[row_name] = {col_name: val}
-        outer = {row_name: Vector(row) for row_name, row in outer.items()}
-        return type(self)(outer)
-
-    def iter_rows(self, operator=lambda x: x):
-        """Yield key, vector pairs for each row. Ineffecient."""
-        return self.transposed().iter_cols(operator=operator)
-
-    def operate_rows(self, operator):
-        """Return a dict with operator applied to each row."""
-        return dict(self.iter_cols(operator=operator))
-
-    def reduce_rows(self, operator):
-        """Return a Vector with operator applied to each row."""
-        return Vector(self.operate_rows(operator))
-
-    def apply_rows(self, operator):
-        """Return a Matrix with operator applied to each row."""
-        return type(self)(self.operate_rows(operator)).transposed()
-
     def filter_rows(self, test):
         """Return a matrix with only columns where `test` returns True.
 
@@ -123,3 +94,15 @@ class MatrixAccess:
             if test(col_name, col_vals)
         }
         return type(self)(kept).transposed()
+
+    def transposed(self):
+        """Flip rows and columns of this matrix."""
+        return self.T
+
+
+
+
+
+
+
+

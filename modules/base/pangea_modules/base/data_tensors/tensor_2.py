@@ -1,6 +1,9 @@
 """Represent level 2 tensors."""
 
+import pandas as pd
+
 from .matrix_data_processing import MatrixProcessing
+from .tensor_1 import Vector
 
 
 class Tensor2:  # pylint: disable=too-few-public-methods
@@ -23,6 +26,12 @@ class Matrix(MatrixProcessing, Tensor2):
     """Represent an unlimited group of vectors."""
 
     def __init__(self, data):
-        self.data = data
-        if isinstance(data, list):
-            self.data = {ind: val for ind, val in enumerate(data)}
+        if not isinstance(data, pd.DataFrame):
+            data = pd.DataFrame(data)
+        super().__init__(data, change_types={pd.Series: Vector})
+        self.data = self._obj
+
+    def __new__(cls, data, *args, **kwargs):
+        if not isinstance(data, pd.DataFrame):
+            data = pd.DataFrame(data)
+        return MatrixProcessing.__new__(cls, data, *args, **kwargs)
