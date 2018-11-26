@@ -10,9 +10,6 @@ from .matrix_data_access import MatrixAccess
 class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
     """Represent an unlimited group of vectors."""
 
-    def __init__(self, data, *args, **kwargs):
-        super().__init__(data, *args, **kwargs)
-
     def col_means(self):
         """Return a vector with the means of each column."""
         return self.reduced_cols(lambda col: col.mean())
@@ -44,6 +41,6 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
         for col_ind in range(params['n_components']):
             new_data[col_ind] = {
                 rownames[row_ind]: tsne_result[row_ind][col_ind]
-                for row_ind in range(self.nrows())
+                for row_ind in range(self.nrows)
             }
         return type(self)(new_data)

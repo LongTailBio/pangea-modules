@@ -8,9 +8,6 @@ from .vector_data_access import VectorAccess
 class VectorProcessing(VectorAccess):
     """Represent a sequence of numerical scalars."""
 
-    def __init__(self, data, *args, **kwargs):
-        super().__init__(data, *args, **kwargs)
-
     def as_compositional(self):
         """Return a vector proportional to this one that sums to 1."""
         my_sum = self.sum()
