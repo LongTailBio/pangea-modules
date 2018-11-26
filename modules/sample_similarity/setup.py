@@ -4,7 +4,6 @@ microlib_name = 'pangea_modules.sample_similarity'
 
 requirements = [
     'mongoengine',
-    'sklearn',
     'pangea_modules.base',
     'pangea_modules.krakenhll_data',
     'pangea_modules.metaphlan2_data',

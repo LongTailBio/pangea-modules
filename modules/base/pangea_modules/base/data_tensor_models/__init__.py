@@ -41,3 +41,7 @@ from .tensor_2 import (
     Tensor2Model,
     MatrixModel,
 )
+from .convenience_models import (
+    ListModel,
+    MapModel,
+)

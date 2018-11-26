@@ -63,6 +63,7 @@ class TestDataTensors(TestCase):
         )
         self.assertEqual(matrix.ncols(), 2)
         self.assertEqual(matrix.nrows(), 3)
+        self.assertEqual(matrix.shape(), (3, 2))
 
     def test_matrix_col_means(self):
         """Check that we get the proper col means."""
@@ -73,6 +74,7 @@ class TestDataTensors(TestCase):
             }
         )
         col_means = matrix.col_means()
+        self.assertIsInstance(col_means, Vector)
         self.assertEqual(col_means['a'], 2)
         self.assertEqual(col_means['b'], 5)
 
@@ -85,5 +87,20 @@ class TestDataTensors(TestCase):
             }
         )
         transposed = matrix.transposed()
+        self.assertIsInstance(transposed, Matrix)
         self.assertEqual(transposed.ncols(), matrix.nrows())
         self.assertEqual(transposed.nrows(), matrix.ncols())
+
+    def test_matrix_tsne_returns_data(self):
+        """Test that TSNE returns data in the proper form."""
+        matrix = Matrix(
+            {
+                'a': Vector([1, 2, 3]),
+                'b': Vector([4, 5, 6]),
+                'c': Vector([7, 8, 9]),
+                'd': Vector([3, 2, 1]),
+            }
+        )
+        tsne_out = matrix.tsne()
+        self.assertIsInstance(tsne_out, Matrix)
+        self.assertEqual((3, 2), tsne_out.shape())

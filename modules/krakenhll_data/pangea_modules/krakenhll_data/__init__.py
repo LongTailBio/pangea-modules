@@ -21,7 +21,7 @@ class KrakenHLLResultModule(AnalysisModule):
     def data_model(cls):
         """Return Kraken module's model class."""
         return FixedGroupModel(
-            taxa=VectorModel(ScalarModel(float, domain=(0, 100))),
+            taxa=VectorModel(ScalarModel(float, domain=(0, None))),
         )
 
     @classmethod

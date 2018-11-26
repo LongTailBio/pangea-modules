@@ -10,7 +10,7 @@ from pangea_modules.krakenhll_data import KrakenHLLResultModule
 from pangea_modules.krakenhll_data.factory import create_result as create_krakenhll
 from pangea_modules.metaphlan2_data import Metaphlan2ResultModule
 from pangea_modules.metaphlan2_data.factory import create_result as create_metaphlan2
-from pangea_modules.top_taxa.models import TopTaxaResult
+from pangea_modules.top_taxa.modules import TopTaxaAnalysisModule
 
 
 KRAKENHLL = KrakenHLLResultModule.name()
@@ -60,7 +60,7 @@ class TopTaxaFactory(factory.mongoengine.MongoEngineFactory):
     class Meta:
         """Factory metadata."""
 
-        model = TopTaxaResult
+        model = TopTaxaAnalysisModule.result_model()
 
     categories = {
         'foo': {

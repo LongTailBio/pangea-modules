@@ -1,12 +1,18 @@
 """Sample Similarity module."""
 
 from pangea_modules.base import AnalysisModule
+from pangea_modules.base.data_tensor_models import (
+    MatrixModel,
+    FixedGroupModel,
+    CategoricalModel,
+    ListModel,
+    MapModel,
+)
 from pangea_modules.krakenhll_data import KrakenHLLResultModule
 from pangea_modules.metaphlan2_data import Metaphlan2ResultModule
 
 from .analysis import processor
 from .constants import MODULE_NAME
-from .models import SampleSimilarityResult
 
 
 class SampleSimilarityAnalysisModule(AnalysisModule):
@@ -20,7 +26,11 @@ class SampleSimilarityAnalysisModule(AnalysisModule):
     @staticmethod
     def data_model():
         """Return data model for Sample Similarity type."""
-        return SampleSimilarityResult
+        return FixedGroupModel(
+            categories=MapModel(ListModel(CategoricalModel())),
+            tools=MapModel(MatrixModel(float)),
+            data_records=MapModel(MapModel()),
+        )
 
     @staticmethod
     def required_modules():
