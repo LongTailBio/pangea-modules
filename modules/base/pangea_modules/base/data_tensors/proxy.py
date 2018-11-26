@@ -90,7 +90,7 @@ class Proxy:
         return repr(self._obj)
 
     def __hash__(self):
-        return hash(object.__getattribute__(self, "_obj"))
+        return hash(object.__getattribute__(self, '_obj'))
 
     @classmethod
     def _create_class_proxy(cls, proxied_class):
