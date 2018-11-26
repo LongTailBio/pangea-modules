@@ -1,5 +1,3 @@
-# pylint disable=protected-access
-
 """Proxy class copied from http://code.activestate.com/recipes/496741-object-proxying/."""
 
 SPECIAL_METHOD_NAMES = [
@@ -46,8 +44,10 @@ def make_method_maker(check_type, return_type, change_types=None):
         """Return a function that converts <check_type> in <return_type>."""
 
         def wrap_func(*args, **kwargs):
-            """Intercept calls to pandas functions and conver to vectors."""
-            args = revise_if(args, all_types_rev, change_types_rev, reviser=lambda val: val._obj)
+            """Intercept calls to pandas functions and convert to tensors."""
+            args = revise_if(
+                args, all_types_rev, change_types_rev, reviser=lambda val: val.get_proxied()
+            )
             if not no_call:
                 pd_attr = func(*args, **kwargs)
             else:
@@ -66,6 +66,10 @@ class Proxy:
         self.make_method = make_method_maker(
             type(self._obj), type(self), change_types=change_types
         )
+
+    def get_proxied(self):
+        """Return the object being proxied."""
+        return self._obj
 
     def __getattr__(self, key):
         pd_attr = getattr(self._obj, key)

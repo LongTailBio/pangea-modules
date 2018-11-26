@@ -10,8 +10,8 @@ from .matrix_data_access import MatrixAccess
 class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
     """Represent an unlimited group of vectors."""
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, *args, **kwargs):
+        super().__init__(data, *args, **kwargs)
         self.data = data
 
     def col_means(self):

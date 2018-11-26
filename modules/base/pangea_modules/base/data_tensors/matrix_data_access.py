@@ -7,8 +7,8 @@ from .proxy import Proxy
 class MatrixAccess(Proxy):
     """Handle all data access fucntions for Matrix class."""
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, *args, **kwargs):
+        super().__init__(data, *args, **kwargs)
         self.data = data
 
     def ncols(self):

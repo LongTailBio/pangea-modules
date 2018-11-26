@@ -6,8 +6,8 @@ from .proxy import Proxy
 class VectorAccess(Proxy):
     """Represent a sequence of numerical scalars."""
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, *args, **kwargs):
+        super().__init__(data, *args, **kwargs)
         self.data = data
 
     def to_pandas(self):
