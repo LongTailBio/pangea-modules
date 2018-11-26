@@ -1,3 +1,5 @@
+# pylint disable=protected-access
+
 """Proxy class copied from http://code.activestate.com/recipes/496741-object-proxying/."""
 
 SPECIAL_METHOD_NAMES = [
@@ -29,7 +31,10 @@ def make_method_maker(check_type, return_type, change_types=None):
     def revise_if(val, type_tuple, type_map, reviser=None):
         """Return a value with types switched out, recursively."""
         if isinstance(val, (tuple, list)):
-            revised = [revise_if(sub_val, type_tuple, type_map) for sub_val in val]
+            revised = [
+                revise_if(sub_val, type_tuple, type_map, reviser=reviser)
+                for sub_val in val
+            ]
             return type(val)(revised)
         if isinstance(val, type_tuple):
             if not reviser:
@@ -37,14 +42,17 @@ def make_method_maker(check_type, return_type, change_types=None):
             return reviser(val)
         return val
 
-    def make_method(func):
+    def make_method(func, no_call=False):
         """Return a function that converts <check_type> in <return_type>."""
 
         def wrap_func(*args, **kwargs):
             """Intercept calls to pandas functions and conver to vectors."""
             args = revise_if(args, all_types_rev, change_types_rev, reviser=lambda val: val._obj)
-            pd_val = func(*args, **kwargs)
-            return revise_if(pd_val, all_types, change_types)
+            if not no_call:
+                pd_attr = func(*args, **kwargs)
+            else:
+                pd_attr = func
+            return revise_if(pd_attr, all_types, change_types)
 
         return wrap_func
     return make_method
@@ -61,7 +69,9 @@ class Proxy:
 
     def __getattr__(self, key):
         pd_attr = getattr(self._obj, key)
-        return self.make_method(pd_attr)
+        if callable(pd_attr):
+            return self.make_method(pd_attr)
+        return self.make_method(pd_attr, no_call=True)()
 
     def __delattr__(self, name):
         delattr(object.__getattribute__(self, "_obj"), name)
