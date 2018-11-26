@@ -4,7 +4,7 @@ SPECIAL_METHOD_NAMES = [
     '__abs__', '__add__', '__and__', '__call__', '__cmp__', '__coerce__',
     '__contains__', '__delitem__', '__delslice__', '__div__', '__divmod__',
     '__eq__', '__float__', '__floordiv__', '__ge__', '__getitem__',
-    '__getslice__', '__gt__', '__hash__', '__hex__', '__iadd__', '__iand__',
+    '__getslice__', '__gt__', '__hex__', '__iadd__', '__iand__',
     '__idiv__', '__idivmod__', '__ifloordiv__', '__ilshift__', '__imod__',
     '__imul__', '__int__', '__invert__', '__ior__', '__ipow__', '__irshift__',
     '__isub__', '__iter__', '__itruediv__', '__ixor__', '__le__', '__len__',
@@ -26,33 +26,33 @@ def make_method_maker(check_type, return_type, change_types=None):
     change_types_rev = {val: key for key, val in change_types.items()}
     all_types, all_types_rev = tuple(change_types.keys()), tuple(change_types_rev.keys())
 
-    def revise_if(val, type_tuple, type_map, reviser=None):
+    def revise_if_instance(val, type_tuple, type_map, reviser=None):
         """Return a value with types switched out, recursively."""
         if isinstance(val, (tuple, list)):
             revised = [
-                revise_if(sub_val, type_tuple, type_map, reviser=reviser)
+                revise_if_instance(sub_val, type_tuple, type_map, reviser=reviser)
                 for sub_val in val
             ]
             return type(val)(revised)
         if isinstance(val, type_tuple):
-            if not reviser:
-                return type_map[type(val)](val)
-            return reviser(val)
+            if reviser:
+                return reviser(val)
+            return type_map[type(val)](val)
         return val
 
-    def make_method(func, no_call=False):
+    def make_method(target_attr, no_call=False):
         """Return a function that converts <check_type> in <return_type>."""
 
         def wrap_func(*args, **kwargs):
             """Intercept calls to pandas functions and convert to tensors."""
-            args = revise_if(
-                args, all_types_rev, change_types_rev, reviser=lambda val: val.get_proxied()
-            )
-            if not no_call:
-                pd_attr = func(*args, **kwargs)
+            if no_call:
+                pd_attr = target_attr
             else:
-                pd_attr = func
-            return revise_if(pd_attr, all_types, change_types)
+                args = revise_if_instance(
+                    args, all_types_rev, change_types_rev, reviser=lambda val: val.get_proxied()
+                )
+                pd_attr = target_attr(*args, **kwargs)
+            return revise_if_instance(pd_attr, all_types, change_types)
 
         return wrap_func
     return make_method
@@ -88,6 +88,9 @@ class Proxy:
 
     def __repr__(self):
         return repr(self._obj)
+
+    def __hash__(self):
+        return hash(object.__getattribute__(self, "_obj"))
 
     @classmethod
     def _create_class_proxy(cls, proxied_class):

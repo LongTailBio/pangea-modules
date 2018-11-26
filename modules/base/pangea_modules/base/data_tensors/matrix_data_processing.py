@@ -12,7 +12,6 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
 
     def __init__(self, data, *args, **kwargs):
         super().__init__(data, *args, **kwargs)
-        self.data = data
 
     def col_means(self):
         """Return a vector with the means of each column."""

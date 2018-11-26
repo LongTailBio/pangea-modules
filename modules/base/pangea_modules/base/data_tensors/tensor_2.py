@@ -29,9 +29,9 @@ class Matrix(MatrixProcessing, Tensor2):
         if not isinstance(data, pd.DataFrame):
             data = pd.DataFrame(data)
         super().__init__(data, change_types={pd.Series: Vector})
-        self.data = self._obj
 
     def __new__(cls, data, *args, **kwargs):
+        """Overwrite new so that special methods will receive the correct types."""
         if not isinstance(data, pd.DataFrame):
             data = pd.DataFrame.from_dict(data, orient='columns')
         return MatrixProcessing.__new__(cls, data, *args, **kwargs)

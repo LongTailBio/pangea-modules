@@ -8,11 +8,10 @@ class VectorAccess(Proxy):
 
     def __init__(self, data, *args, **kwargs):
         super().__init__(data, *args, **kwargs)
-        self.data = data
 
     def to_pandas(self):
         """Return a pandas series based on this vector."""
-        return self.data
+        return self._obj
 
     def operated(self, operator):
         """Return a vector with <operator> applied to each element."""

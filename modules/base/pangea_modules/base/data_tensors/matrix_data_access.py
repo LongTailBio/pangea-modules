@@ -9,27 +9,19 @@ class MatrixAccess(Proxy):
 
     def __init__(self, data, *args, **kwargs):
         super().__init__(data, *args, **kwargs)
-        self.data = data
-
-    def ncols(self):
-        """Return the number of columns in this matrix."""
-        return self.shape[1]
-
-    def nrows(self):
-        """Return the number of rows in this matrix."""
-        return self.shape[0]
+        self.nrows, self.ncols = self.shape
 
     def colnames(self):
-        """Return a lsit of colnames."""
+        """Return a list of column names."""
         return self.columns
 
     def rownames(self):
-        """Return a list of rownames."""
+        """Return a list of row names."""
         return self.index
 
     def to_pandas(self):
         """Return this matrix as a pandas dataframe."""
-        return self.data
+        return self._obj
 
     def to_numpy(self):
         """Return this matrix as a numpy matrix."""

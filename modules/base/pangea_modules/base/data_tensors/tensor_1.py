@@ -28,9 +28,9 @@ class Vector(VectorProcessing, Tensor1):
         if not isinstance(data, pd.Series):
             data = pd.Series(data)
         super().__init__(data)
-        self.data = self._obj
 
     def __new__(cls, data, *args, **kwargs):
+        """Overwrite new so that special methods will receive the correct types."""
         if not isinstance(data, pd.Series):
             data = pd.Series(data)
         return VectorProcessing.__new__(cls, data, *args, **kwargs)
