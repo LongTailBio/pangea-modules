@@ -1,7 +1,5 @@
 """Handle data access fucntionality for matrix class."""
 
-import pandas as pd
-
 from .tensor_1 import Vector
 from .proxy import Proxy
 
@@ -98,11 +96,3 @@ class MatrixAccess(Proxy):
     def transposed(self):
         """Flip rows and columns of this matrix."""
         return self.T
-
-
-
-
-
-
-
-

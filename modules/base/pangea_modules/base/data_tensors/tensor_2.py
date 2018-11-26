@@ -33,5 +33,5 @@ class Matrix(MatrixProcessing, Tensor2):
 
     def __new__(cls, data, *args, **kwargs):
         if not isinstance(data, pd.DataFrame):
-            data = pd.DataFrame(data)
+            data = pd.DataFrame.from_dict(data, orient='columns')
         return MatrixProcessing.__new__(cls, data, *args, **kwargs)
