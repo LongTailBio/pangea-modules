@@ -18,27 +18,33 @@ SPECIAL_METHOD_NAMES = [
 ]
 
 
-def make_method_maker(check_type, return_type, change_types={}):
+def make_method_maker(check_type, return_type, change_types=None):
     """Return a function that itself makes wrapped functions."""
+    if not change_types:
+        change_types = {}
+    change_types[check_type] = return_type
+    change_types_rev = {val: key for key, val in change_types.items()}
+    all_types, all_types_rev = tuple(change_types.keys()),  tuple(change_types_rev.keys())
+
+    def revise_if(val, type_tuple, type_map, reviser=None):
+        """Return a value with types switched out, recursively."""
+        if not reviser:
+            reviser = lambda my_val: type_map[type(my_val)](my_val)
+        if isinstance(val, (tuple, list)):
+            revised = [revise_if(sub_val, type_tuple, type_map) for sub_val in val]
+            return type(val)(revised)
+        elif isinstance(val, type_tuple):
+            return reviser(val)
+        return val
 
     def make_method(func):
         """Return a function that converts <check_type> in <return_type>."""
 
         def wrap_func(*args, **kwargs):
             """Intercept calls to pandas functions and conver to vectors."""
-            new_args = []
-            for arg in args:
-                if isinstance(arg, return_type):
-                    new_args.append(arg._obj)
-                else:
-                    new_args.append(arg)
-
+            args = revise_if(args, all_types_rev, change_types_rev, reviser=lambda val: val._obj)
             pd_val = func(*new_args, **kwargs)
-            if isinstance(pd_val, check_type):
-                return return_type(pd_val)
-            if change_types and type(pd_val) in change_types:
-                return change_types[type(pd_val)](pd_val)
-            return pd_val
+            return revise_if(pd_val, all_types, change_types)
 
         return wrap_func
     return make_method
@@ -59,14 +65,6 @@ class Proxy:
 
     def __delattr__(self, name):
         delattr(object.__getattribute__(self, "_obj"), name)
-
-    '''
-    def __setattr__(self, name, value):
-        try:
-            setattr(object.__getattribute__(self, "_obj"), name, value)
-        except AttributeError:
-            setattr(self, )
-    '''
 
     def __nonzero__(self):
         return bool(self._obj)
