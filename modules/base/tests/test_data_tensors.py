@@ -77,7 +77,7 @@ class TestDataTensors(TestCase):
         )
         self.assertEqual(matrix.ncols(), 2)
         self.assertEqual(matrix.nrows(), 3)
-        self.assertEqual(matrix.shape(), (3, 2))
+        self.assertEqual(matrix.shape, (3, 2))
 
     def test_matrix_col_means(self):
         """Check that we get the proper col means."""
@@ -117,4 +117,4 @@ class TestDataTensors(TestCase):
         )
         tsne_out = matrix.tsne()
         self.assertIsInstance(tsne_out, Matrix)
-        self.assertEqual((3, 2), tsne_out.shape())
+        self.assertEqual((3, 2), tsne_out.shape)
