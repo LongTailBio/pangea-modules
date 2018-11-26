@@ -12,7 +12,7 @@ METAPHLAN = Metaphlan2ResultModule
 def filter_taxa_by_kingdom(taxa_matrix, kingdom):
     """Return taxa in the given kingdom."""
     if kingdom == 'all_kingdoms':
-        return taxa_matrix.filter_cols(lambda taxa_name, _: 's__' in taxa_name.split('|')[-1])
+        return taxa_matrix.filtered_cols(lambda taxa_name, _: 's__' in taxa_name.split('|')[-1])
     raise ValueError(f'Kingdom {kingdom} not found.')
 
 
@@ -28,7 +28,7 @@ def processor(samples):
                 kingdom_taxa_matrix = filter_taxa_by_kingdom(taxa_matrix, kingdom)
                 out[tool.name()][kingdom] = {
                     'abundance': kingdom_taxa_matrix.col_means(),
-                    'prevalence': kingdom_taxa_matrix.operate_cols(lambda col: col.num_non_zero()),
+                    'prevalence': kingdom_taxa_matrix.operated_cols(lambda col: col.num_non_zero()),
                 }
         return out
 

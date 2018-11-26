@@ -16,15 +16,15 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        return self.reduce_cols(lambda col: col.mean())
+        return self.reduced_cols(lambda col: col.mean())
 
     def row_means(self):  # pylint disable=no-member
         """Return a vector with means for each row."""
-        return self.reduce_rows(lambda row: row.mean())  # pylint disable=no-member
+        return self.reduced_rows(lambda row: row.mean())  # pylint disable=no-member
 
     def compositional_rows(self):
         """Return a Matrix where each row sums to 1."""
-        return self.apply_rows(lambda row: row.as_compositional())
+        return self.applied_rows(lambda row: row.as_compositional())
 
     def tsne(self, **kwargs):
         """Run tSNE algorithm on array of features and return labeled results."""

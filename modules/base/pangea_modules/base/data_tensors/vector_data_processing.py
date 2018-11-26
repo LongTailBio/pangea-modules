@@ -15,11 +15,10 @@ class VectorProcessing(VectorAccess):
     def as_compositional(self):
         """Return a vector proportional to this one that sums to 1."""
         my_sum = self.sum()
-        return self.operate(lambda val: val / my_sum)
+        return self.operated(lambda val: val / my_sum)
 
     def percentile(self, *percentiles):
         """Return a vector of percentiles of the data."""
-        print(self.values)
         return type(self)(np.percentile(self.values, percentiles))  # pylint: disable=no-member
 
     def quartiles(self):

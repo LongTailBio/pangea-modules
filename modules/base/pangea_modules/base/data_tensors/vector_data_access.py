@@ -14,11 +14,11 @@ class VectorAccess(Proxy):
         """Return a pandas series based on this vector."""
         return self.data
 
-    def operate(self, operator):
+    def operated(self, operator):
         """Return a vector with <operator> applied to each element."""
         return type(self)({key: operator(val) for key, val in self.items()})
 
-    def reduce(self, operator):
+    def reduced(self, operator):
         """Return the function applied to the values in the vector.
 
         Order of values is not guaranteed.
