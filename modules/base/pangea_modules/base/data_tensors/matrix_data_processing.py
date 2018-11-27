@@ -1,3 +1,5 @@
+# pylint disable=no-member
+
 """Handle data processing fucntionality for matrix class."""
 
 from sklearn.manifold import TSNE
@@ -10,15 +12,15 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
 
     def col_means(self):
         """Return a vector with the means of each column."""
-        return self.reduce_cols(lambda col: col.mean())
+        return self.reduced_cols(lambda col: col.mean())
 
     def row_means(self):  # pylint disable=no-member
         """Return a vector with means for each row."""
-        return self.transposed().col_means()  # pylint disable=no-member
+        return self.reduced_rows(lambda row: row.mean())  # pylint disable=no-member
 
     def compositional_rows(self):
         """Return a Matrix where each row sums to 1."""
-        return self.apply_rows(lambda row: row.as_compositional())
+        return self.applied_rows(lambda row: row.as_compositional())
 
     def tsne(self, **kwargs):
         """Run tSNE algorithm on array of features and return labeled results."""
@@ -32,13 +34,13 @@ class MatrixProcessing(MatrixAccess):  # pylint disable=no-member
             'metric': 'euclidean',
         }
         params.update(kwargs)
-        np_matrix = self.as_pandas().fillna(0).values
+        np_matrix = self.to_pandas().fillna(0).values
         tsne_result = TSNE(**params).fit_transform(np_matrix)
         rownames = self.rownames()
         new_data = {}
         for col_ind in range(params['n_components']):
             new_data[col_ind] = {
                 rownames[row_ind]: tsne_result[row_ind][col_ind]
-                for row_ind in range(self.nrows())
+                for row_ind in range(self.nrows)
             }
         return type(self)(new_data)

@@ -10,7 +10,7 @@ def taxa_tool_tsne(samples, tool):
     axis_labels = [f'{tool.name()} tsne x', f'{tool.name()} tsne y']
     taxa_matrix = tool.promote_data(samples)['taxa']
     taxa_tsne = taxa_matrix.tsne()
-    taxa_tsne = {axis_labels[i]: axis for i, axis in taxa_tsne.iter_cols()}
+    taxa_tsne = {axis_labels[i]: axis for i, axis in taxa_tsne.iterated_cols()}
 
     return taxa_tsne
 

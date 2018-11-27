@@ -1,5 +1,7 @@
 """Represent tensors that contain atomic tensors."""
 
+import pandas as pd
+
 from .vector_data_processing import VectorProcessing
 
 
@@ -23,6 +25,12 @@ class Vector(VectorProcessing, Tensor1):
     """Represent a sequence of numerical scalars."""
 
     def __init__(self, data):
-        self.data = data
-        if isinstance(data, list):
-            self.data = {indvar: val for indvar, val in enumerate(data)}
+        if not isinstance(data, pd.Series):
+            data = pd.Series(data)
+        super().__init__(data)
+
+    def __new__(cls, data, *args, **kwargs):
+        """Overwrite new so that special methods will receive the correct types."""
+        if not isinstance(data, pd.Series):
+            data = pd.Series(data)
+        return VectorProcessing.__new__(cls, data, *args, **kwargs)
