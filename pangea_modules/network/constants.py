@@ -2,6 +2,8 @@
 from os import environ
 from os.path import join
 
+LOCAL_SERVER_INTERFACE_TOKEN = 'LOCAL'
+
 CONFIG_AUTH_SECTION = 'pangea_server'
 CONFIG_AUTH_JWT_TOKEN = 'token'
 CONFIG_AUTH_HOST = 'host'
