@@ -11,24 +11,44 @@ class PangeaTarget(luigi.Target):
 
     """
 
-    def __init__(self, server_address, group_name, sample_name, module_name, field_name, is_s3=False):
+    def __init__(
+        self,
+        server_address, group_name, sample_name, module_name, field_name,
+        is_s3=False, local_path=None, payload=None, force_rebuild=False
+    ):
         self.group_name = group_name
         self.sample_name = sample_name
         self.module_name = module_name
         self.field_name = field_name
         self.is_s3 = is_s3
+        self.force_rebuild = force_rebuild
         self.server = PangeaServerInterface.from_address(server_address)
-        self.payload = self.server.find_result_field(
-            self.group_name, self.sample_name, self.module_name, self.field_name
-        )
+        self.is_local_path = False
+        if local_path:  # bit hacky
+            self.is_s3 = True
+            self.is_local_path = True
+            self.payload = S3Uri(
+                self.server.download_manager.endpoint_url,
+                None,
+                self.server.download_manager
+            )
+            self.payload._local_path = local_path
+        elif payload:
+            self.payload = payload
+        else:
+            self.payload = self.server.find_result_field(
+                self.group_name, self.sample_name, self.module_name, self.field_name
+            )
         if self.is_s3 and self.payload:
             assert isinstance(self.payload, S3Uri)
 
     def exists(self):
+        if self.force_rebuild:
+            return False
         if self.payload is None:
             return False
         if self.is_s3:
-            return self.payload.exists_on_s3()
+            return self.is_local_path or self.payload.exists_on_s3()
         return True
 
     def set_payload(self, value):
@@ -56,13 +76,16 @@ class PangeaTarget(luigi.Target):
     def makedirs(self):
         """Create parent folders for the local path if they do not exist."""
         assert self.is_s3
-        normpath = os.path.normpath(self.path)
+        normpath = os.path.normpath(self.local_path())
         parentfolder = os.path.dirname(normpath)
         if parentfolder:
             try:
                 os.makedirs(parentfolder)
             except OSError:
                 pass
+
+    def start_download(self):
+        assert self.is_s3
 
     def local_path(self, sleep_time=10):
         assert self.is_s3

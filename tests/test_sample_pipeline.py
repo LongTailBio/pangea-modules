@@ -5,20 +5,25 @@ from shutil import rmtree
 from os.path import join, dirname, isfile, isdir
 from unittest import TestCase
 
-from sample_pipeline import CountRawReads
+from .sample_pipeline import CountRawReads
 
-RAW_READS_1 = join(dirname(__file__), 'data/zymo_pos_cntrl.r1.fq.gz')
-RAW_READS_2 = join(dirname(__file__), 'data/zymo_pos_cntrl.r2.fq.gz')
-TEST_CONFIG = join(dirname(__file__), 'data/test_config.yaml')
+from .constants import (
+    SERVER_ADDRESS,
+    RAW_READS_1,
+)
 
 
-class TestPipelinePreprocessing(TestCase):
+class TestSamplePipeline(TestCase):
 
     def test_invoke_count_raw_reads(self):
-        server_address = None  # TODO: set up local server interface
         instance = CountRawReads(
             group_name='test_group',
             sample_name='test_sample',
-            server_address=server_address,
+            server_address=SERVER_ADDRESS,
         )
+        instance.reads.output()['reads_1']._local_path = RAW_READS_1
+        print(instance.output()['read_count'])
         luigi.build([instance], local_scheduler=True)
+        print(instance.output()['read_count'])
+        n_reads = instance.output()['read_count'].payload
+        self.assertEqual(n_reads, 1000)

@@ -37,6 +37,7 @@ class S3TransferManager:
         self.file_lock = FileLock(status_filepath)
         self.status_filepath = status_filepath
         self.session = boto3.Session(profile_name=profile_name)
+        self.endpoint_url = endpoint_url
         self.s3 = self.session.resource('s3', endpoint_url=endpoint_url)
         self.config = config
 
