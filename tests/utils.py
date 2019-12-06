@@ -7,7 +7,7 @@ from json import dumps
 
 from functools import wraps
 
-from pangea_modules import PangeaServerInterface, S3Uri, PangeaTarget
+from pangea_modules import PangeaServerInterface, PangeaTarget
 
 
 def with_aws_credentials(func):

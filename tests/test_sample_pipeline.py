@@ -4,6 +4,7 @@ import luigi
 from shutil import rmtree
 from os.path import join, dirname, isfile, isdir
 from unittest import TestCase
+from pangea_modules import pangea_build
 
 from .sample_pipeline import CountRawReads
 
@@ -23,7 +24,7 @@ class TestSamplePipeline(TestCase):
         )
         instance.reads.output()['reads_1']._local_path = RAW_READS_1
         print(instance.output()['read_count'])
-        luigi.build([instance], local_scheduler=True)
+        pangea_build([instance], local_scheduler=True)
         print(instance.output()['read_count'])
         n_reads = instance.output()['read_count'].payload
         self.assertEqual(n_reads, 1000)
