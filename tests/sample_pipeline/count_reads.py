@@ -7,34 +7,29 @@ from .raw_reads import RawReads
 
 
 class CountRawReads(PangeaTask):
-    server_address = luigi.Parameter()
     group_name = luigi.Parameter()
     sample_name = luigi.Parameter()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.reads = RawReads(
-            server_address=self.server_address,
             group_name=self.group_name,
             sample_name=self.sample_name,
         )
-        self.target = None
 
     def name(self):
         return 'count_raw_reads'
 
     def output(self):
-        if not self.target:
-            self.target = PangeaTarget(
-                self.server_address,
-                self.group_name,
-                self.sample_name,
-                self.name(),
-                'read_count',
-                payload=-1,
-                force_rebuild=True
-            )
-        return {'read_count': self.target}
+        target = PangeaTarget(
+            self.server_address,
+            self.group_name,
+            self.sample_name,
+            self.name(),
+            'read_count',
+            local=self.local
+        )
+        return {'read_count': target}
 
     def requires(self):
         return self.reads

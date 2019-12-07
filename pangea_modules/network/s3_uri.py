@@ -1,6 +1,10 @@
 
 from time import sleep
 
+from os.path import isfile, abspath
+
+from .constants import LOCAL_SERVER_INTERFACE_TOKEN
+
 
 class S3Uri:
 
@@ -36,6 +40,7 @@ class S3Uri:
 
     def serializable(self):
         return {
+            '__type__': 's3_uri',
             'endpoint_url': self.endpoint_url,
             'uri': self.uri_str,
         }
@@ -46,4 +51,40 @@ class S3Uri:
             field['endpoint_url'],
             field['uri'],
             download_manager
+        )
+
+
+class LocalS3Uri(S3Uri):
+
+    def __init__(self, uri_str):
+        self.endpoint_url = LOCAL_SERVER_INTERFACE_TOKEN
+        self.uri_str = abspath(uri_str)
+
+    def local_path(self, sleep_time=10):
+        """Return the local path to this file.
+
+        Blocks till download is complete.
+        """
+        return self.uri_str
+
+    def exists_on_s3(self):
+        return isfile(self.uri_str)
+
+    def upload(self):
+        pass
+
+    def start_download(self):
+        pass
+
+    def serializable(self):
+        return {
+            '__type__': 's3_uri',
+            'endpoint_url': self.endpoint_url,
+            'uri': self.uri_str,
+        }
+
+    @classmethod
+    def from_dict(cls, field):
+        return cls(
+            field['uri'],
         )

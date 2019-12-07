@@ -2,7 +2,12 @@
 import luigi
 import os
 
-from .network import PangeaServerInterface, S3Uri
+from .network import (
+    PangeaServerInterface,
+    S3Uri,
+    LocalPangeaServerInterface,
+    LocalS3Uri,
+)
 
 
 class PangeaTarget(luigi.Target):
@@ -14,7 +19,7 @@ class PangeaTarget(luigi.Target):
     def __init__(
         self,
         server_address, group_name, sample_name, module_name, field_name,
-        is_s3=False, local_path=None, payload=None, force_rebuild=False
+        is_s3=False, local=False, force_rebuild=False, ext=''
     ):
         self.group_name = group_name
         self.sample_name = sample_name
@@ -22,25 +27,22 @@ class PangeaTarget(luigi.Target):
         self.field_name = field_name
         self.is_s3 = is_s3
         self.force_rebuild = force_rebuild
-        self.server = PangeaServerInterface.from_address(server_address)
-        self.is_local_path = False
-        if local_path:  # bit hacky
-            self.is_s3 = True
-            self.is_local_path = True
-            self.payload = S3Uri(
-                self.server.download_manager.endpoint_url,
-                None,
-                self.server.download_manager
-            )
-            self.payload._local_path = local_path
-        elif payload:
-            self.payload = payload
+        self.local = local
+        if self.local:
+            self.server = LocalPangeaServerInterface.from_address(server_address)
+            assert isinstance(self.server, LocalPangeaServerInterface)
         else:
-            self.payload = self.server.find_result_field(
-                self.group_name, self.sample_name, self.module_name, self.field_name
+            self.server = PangeaServerInterface.from_address(server_address)
+        self.payload = self.server.find_result_field(
+            self.group_name, self.sample_name, self.module_name, self.field_name
+        )
+        if self.payload is None and self.is_s3:
+            self.payload = self.server.get_s3_uri(
+                self.group_name, self.sample_name, self.module_name, self.field_name,
+                ext=ext
             )
         if self.is_s3 and self.payload:
-            assert isinstance(self.payload, S3Uri)
+            assert isinstance(self.payload, (S3Uri, LocalS3Uri))
 
     def exists(self):
         if self.force_rebuild:
@@ -48,13 +50,16 @@ class PangeaTarget(luigi.Target):
         if self.payload is None:
             return False
         if self.is_s3:
-            return self.is_local_path or self.payload.exists_on_s3()
+            return self.payload.exists_on_s3()
         return True
 
     def set_payload(self, value):
         """Set the payload for this target. Return self for convenience."""
         if self.is_s3:
-            value = S3Uri(value, self.server.download_manager)
+            if self.local:
+                value = LocalS3Uri(value)
+            else:
+                value = S3Uri(value, self.server.download_manager)
         self.payload = value
         return self
 
