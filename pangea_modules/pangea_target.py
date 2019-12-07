@@ -19,7 +19,7 @@ class PangeaTarget(luigi.Target):
     def __init__(
         self,
         server_address, group_name, sample_name, module_name, field_name,
-        is_s3=False, local=False, force_rebuild=False
+        is_s3=False, local=False, force_rebuild=False, ext=''
     ):
         self.group_name = group_name
         self.sample_name = sample_name
@@ -36,8 +36,12 @@ class PangeaTarget(luigi.Target):
         self.payload = self.server.find_result_field(
             self.group_name, self.sample_name, self.module_name, self.field_name
         )
+        if self.payload is None and self.is_s3:
+            self.payload = self.server.get_s3_uri(
+                self.group_name, self.sample_name, self.module_name, self.field_name,
+                ext=ext
+            )
         if self.is_s3 and self.payload:
-            print(self.payload)
             assert isinstance(self.payload, (S3Uri, LocalS3Uri))
 
     def exists(self):
@@ -53,7 +57,7 @@ class PangeaTarget(luigi.Target):
         """Set the payload for this target. Return self for convenience."""
         if self.is_s3:
             if self.local:
-                value = LocalS3Uri(value, self.server.download_manager)
+                value = LocalS3Uri(value)
             else:
                 value = S3Uri(value, self.server.download_manager)
         self.payload = value

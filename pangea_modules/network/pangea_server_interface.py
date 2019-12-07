@@ -31,9 +31,11 @@ class PangeaServerInterface:
         self.knex = knex
         self.download_manager = download_manager
 
-    def get_s3_uri(self, group_name, sample_name, module_name, field_name):
+    def get_s3_uri(self, group_name, sample_name, module_name, field_name, ext=''):
         """Return an S3Uri for the given params."""
         url = f'{AR_NAME_URL}/{group_name}/{sample_name}/{module_name}/{field_name}/s3uri'
+        if ext:
+            url += f'?ext={ext}'
         response = self.knex.get(url)
         field = S3Uri.from_dict(response, self.download_manager)
         return field
@@ -87,7 +89,7 @@ class LocalPangeaServerInterface:
     def __init__(self, config):
         self.config = config
 
-    def _build_local_path(self, group_name, sample_name, module_name, field_name):
+    def _build_local_path(self, group_name, sample_name, module_name, field_name, ext=''):
         path_string = join(
             self.config[CONFIG_LOCAL_FS_SECTION][CONFIG_LOCAL_FS_PATH_PREFIX],
             self.config[CONFIG_LOCAL_FS_SECTION].get(
@@ -95,17 +97,20 @@ class LocalPangeaServerInterface:
                 '<bucket_name>/<key>'
             )
         )
+        if ext and ext[0] != '.':
+            ext = '.' + ext
         path_string = path_string.replace('<bucket_name>', group_name)
-        path_string = path_string.replace(
-            '<key>',
-            f'{sample_name}/{module_name}/{group_name}.{sample_name}.{module_name}.{field_name}.json'
+        key = (
+            f'{sample_name}/{module_name}/'
+            f'{group_name}.{sample_name}.{module_name}.{field_name}{ext}'
         )
+        path_string = path_string.replace('<key>', key)
         return path_string
 
-    def get_s3_uri(self, group_name, sample_name, module_name, field_name):
+    def get_s3_uri(self, group_name, sample_name, module_name, field_name, ext=''):
         """Return an S3Uri for the given params."""
         local_path = self._build_local_path(
-            group_name, sample_name, module_name, field_name
+            group_name, sample_name, module_name, field_name, ext=ext
         )
         field = LocalS3Uri(local_path)
         return field
@@ -115,7 +120,7 @@ class LocalPangeaServerInterface:
         if isinstance(field_value, S3Uri):
             field_value = field_value.serializable()
         local_path = self._build_local_path(
-            group_name, sample_name, module_name, field_name
+            group_name, sample_name, module_name, field_name, ext='pangea.json'
         )
         makedirs(dirname(local_path), exist_ok=True)
         with open(local_path, 'w') as lp:
@@ -126,9 +131,8 @@ class LocalPangeaServerInterface:
         """Check for relevant result field in the filesystem. Return the payload
         if it exists else None. If payload is S3 return as an S3Uri"""
         local_path = self._build_local_path(
-            group_name, sample_name, module_name, field_name
+            group_name, sample_name, module_name, field_name, ext='pangea.json'
         )
-        print(local_path)
         if not isfile(local_path):
             return None
         field = json.loads(open(local_path).read())

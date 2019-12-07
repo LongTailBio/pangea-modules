@@ -1,7 +1,7 @@
 
 from time import sleep
 
-from os.path import isfile
+from os.path import isfile, abspath
 
 from .constants import LOCAL_SERVER_INTERFACE_TOKEN
 
@@ -58,7 +58,7 @@ class LocalS3Uri(S3Uri):
 
     def __init__(self, uri_str):
         self.endpoint_url = LOCAL_SERVER_INTERFACE_TOKEN
-        self.uri_str = uri_str
+        self.uri_str = abspath(uri_str)
 
     def local_path(self, sleep_time=10):
         """Return the local path to this file.
