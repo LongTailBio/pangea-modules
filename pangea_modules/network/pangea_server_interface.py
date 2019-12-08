@@ -36,7 +36,7 @@ class PangeaServerInterface:
         url = f'{AR_NAME_URL}/{group_name}/{sample_name}/{module_name}/{field_name}/s3uri'
         if ext:
             url += f'?ext={ext}'
-        response = self.knex.get(url)
+        response = self.knex.get(url)['data']
         field = S3Uri.from_dict(response, self.download_manager)
         return field
 
@@ -54,7 +54,7 @@ class PangeaServerInterface:
         """Check for relevant result field in the db. Return the payload
         if it exists else None. If payload is S3 return as an S3Uri"""
         url = f'{AR_NAME_URL}/{group_name}/{sample_name}/{module_name}'
-        response = self.knex.get(url)
+        response = self.knex.get(url)['data']
         field = response[field_name]
         try:
             if '__type__' in field and field['__type__'].lower() == 's3_uri':
