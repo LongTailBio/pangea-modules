@@ -63,6 +63,38 @@ class PangeaServerInterface:
             pass
         return field
 
+    def get_group_s3_uri(self, group_name, module_name, field_name, ext=''):
+        """Return an S3Uri for the given params."""
+        url = f'{AR_NAME_URL}/group/{group_name}/{module_name}/{field_name}/s3uri'
+        if ext:
+            url += f'?ext={ext}'
+        response = self.knex.get(url)['data']
+        field = S3Uri.from_dict(response, self.download_manager)
+        return field
+
+    def load_group_result_field(self, group_name, module_name, field_name, field_value):
+        """Load the field into the Pangea database."""
+        payload = field_value
+        if isinstance(payload, S3Uri):
+            payload.upload()
+            payload = payload.serializable()
+        url = f'{AR_NAME_URL}/group/{group_name}/{module_name}/{field_name}'
+        response = self.knex.post(url, payload)
+        return response
+
+    def find_group_result_field(self, group_name, module_name, field_name):
+        """Check for relevant result field in the db. Return the payload
+        if it exists else None. If payload is S3 return as an S3Uri"""
+        url = f'{AR_NAME_URL}/group/{group_name}/{module_name}'
+        response = self.knex.get(url)['data']
+        field = response[field_name]
+        try:
+            if '__type__' in field and field['__type__'].lower() == 's3_uri':
+                field = S3Uri.from_dict(field, self.download_manager)
+        except TypeError:
+            pass
+        return field
+
     @classmethod
     def from_address(cls, server_address):
         config = configparser.ConfigParser()
@@ -142,6 +174,19 @@ class LocalPangeaServerInterface:
         except TypeError:
             pass
         return field
+
+    def get_group_s3_uri(self, group_name, module_name, field_name, ext=''):
+        """Return an S3Uri for the given params."""
+        pass
+
+    def load_group_result_field(self, group_name, module_name, field_name, field_value):
+        """Write a file locally containing the field_value. Return the filepath."""
+        pass
+
+    def find_group_result_field(self, group_name, module_name, field_name):
+        """Check for relevant result field in the filesystem. Return the payload
+        if it exists else None. If payload is S3 return as an S3Uri"""
+        pass
 
     @classmethod
     def from_address(cls, server_address):
