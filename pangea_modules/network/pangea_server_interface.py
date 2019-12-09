@@ -96,8 +96,13 @@ class PangeaServerInterface:
         return field
 
     def get_samples_in_group(self, group_name):
-        """Return a list of the samples in the specified group."""
-        assert False
+        """Return a list of the sample names in the specified group."""
+        url = f'/api/v1/sample_groups/byname/{group_name}/samples'
+        response = self.knex.get(url)['data']
+        out = []
+        for sample in response['samples']:
+            out.append(sample['sample']['name'])
+        return out
 
     @classmethod
     def from_address(cls, server_address):
@@ -180,18 +185,57 @@ class LocalPangeaServerInterface:
             pass
         return field
 
+    def _build_group_local_path(self, group_name, module_name, field_name, ext=''):
+        path_string = join(
+            self.config[CONFIG_LOCAL_FS_SECTION][CONFIG_LOCAL_FS_PATH_PREFIX],
+            self.config[CONFIG_LOCAL_FS_SECTION].get(
+                CONFIG_LOCAL_FS_PATH_TEMPLATE,
+                '<bucket_name>/<kind>/<key>'
+            )
+        )
+        if ext and ext[0] != '.':
+            ext = '.' + ext
+        path_string = path_string.replace('<bucket_name>', group_name)
+        path_string = path_string.replace('<kind>', 'results')
+        key = f'{module_name}/{group_name}.{module_name}.{field_name}{ext}'
+        path_string = path_string.replace('<key>', key)
+        return path_string
+
     def get_group_s3_uri(self, group_name, module_name, field_name, ext=''):
         """Return an S3Uri for the given params."""
-        assert False
+        local_path = self._build_group_local_path(
+            group_name, module_name, field_name, ext=ext
+        )
+        field = LocalS3Uri(local_path)
+        return field
 
     def load_group_result_field(self, group_name, module_name, field_name, field_value):
         """Write a file locally containing the field_value. Return the filepath."""
-        assert False
+        if isinstance(field_value, S3Uri):
+            field_value = field_value.serializable()
+        local_path = self._build_group_local_path(
+            group_name, module_name, field_name, ext='pangea.json'
+        )
+        makedirs(dirname(local_path), exist_ok=True)
+        with open(local_path, 'w') as lp:
+            lp.write(json.dumps(field_value))
+        return None
 
     def find_group_result_field(self, group_name, module_name, field_name):
         """Check for relevant result field in the filesystem. Return the payload
         if it exists else None. If payload is S3 return as an S3Uri"""
-        assert False
+        local_path = self._build_group_local_path(
+            group_name, module_name, field_name, ext='pangea.json'
+        )
+        if not isfile(local_path):
+            return None
+        field = json.loads(open(local_path).read())
+        try:
+            if '__type__' in field and field['__type__'].lower() == 's3_uri':
+                field = LocalS3Uri.from_dict(field)
+        except TypeError:
+            pass
+        return field
 
     def get_samples_in_group(self, group_name):
         """Return a list of the samples in the specified group."""
