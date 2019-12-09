@@ -1,6 +1,11 @@
 
 import luigi
 
+from .network import (
+    PangeaServerInterface,
+    LocalPangeaServerInterface,
+)
+
 
 class PangeaTask(luigi.Task):
 
@@ -18,8 +23,12 @@ class PangeaTask(luigi.Task):
                 yield module
 
     def set_server_address(self, server_address, local=False):
-        self.set_local(local=local)
         self.server_address = server_address
+        if local:
+            self.server = LocalPangeaServerInterface.from_address(server_address)
+        else:
+            self.server = PangeaServerInterface.from_address(server_address)
+        self.set_local(local=local)
         for module in self._iter_pangea_requires():
             module.set_server_address(server_address, local=local)
 
@@ -41,3 +50,16 @@ class PangeaTask(luigi.Task):
         Only needs to be set if the task is slow.
         """
         return 1
+
+
+class PangeaGroupTask(PangeaTask):
+    group_name = luigi.Parameter()
+
+    def sample_names(self):
+        """Return a list of sample names in this group."""
+        return self.server.get_samples_in_group(self.group_name)
+
+
+class PangeaSampleTask(PangeaTask):
+    group_name = luigi.Parameter()
+    sample_name = luigi.Parameter()

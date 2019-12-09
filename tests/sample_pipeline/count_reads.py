@@ -1,14 +1,11 @@
 
-import luigi
-from pangea_modules import PangeaTarget, PangeaTask
+from pangea_modules import PangeaSampleTarget, PangeaSampleTask
 from gzip import open as gopen
 
 from .raw_reads import RawReads
 
 
-class CountRawReads(PangeaTask):
-    group_name = luigi.Parameter()
-    sample_name = luigi.Parameter()
+class CountRawReads(PangeaSampleTask):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,7 +18,7 @@ class CountRawReads(PangeaTask):
         return 'count_raw_reads'
 
     def output(self):
-        target = PangeaTarget(
+        target = PangeaSampleTarget(
             self.server_address,
             self.group_name,
             self.sample_name,

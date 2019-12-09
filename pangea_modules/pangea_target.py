@@ -131,11 +131,11 @@ class PangeaGroupTarget(PangeaTarget):
             self.server = PangeaServerInterface.from_address(server_address)
 
         self.payload = self.server.find_group_result_field(
-            self.group_name, self.sample_name, self.module_name, self.field_name
+            self.group_name, self.module_name, self.field_name
         )
         if self.payload is None and self.is_s3:
             self.payload = self.server.get_group_s3_uri(
-                self.group_name, self.sample_name, self.module_name, self.field_name,
+                self.group_name, self.module_name, self.field_name,
                 ext=ext
             )
         if self.is_s3 and self.payload:

@@ -1,6 +1,5 @@
 
-import luigi
-from pangea_modules import PangeaTarget, PangeaTask
+from pangea_modules import PangeaSampleTarget, PangeaSampleTask
 from gzip import open as gopen
 
 from .raw_reads import RawReads
@@ -8,9 +7,7 @@ from .raw_reads import RawReads
 CLIP_LEN = 31
 
 
-class ClipRawReads(PangeaTask):
-    group_name = luigi.Parameter()
-    sample_name = luigi.Parameter()
+class ClipRawReads(PangeaSampleTask):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,7 +20,7 @@ class ClipRawReads(PangeaTask):
         return 'clip_raw_reads'
 
     def output(self):
-        reads1 = PangeaTarget(
+        reads1 = PangeaSampleTarget(
             self.server_address,
             self.group_name,
             self.sample_name,
@@ -33,7 +30,7 @@ class ClipRawReads(PangeaTask):
             is_s3=True,
             ext='fastq.gz'
         )
-        reads2 = PangeaTarget(
+        reads2 = PangeaSampleTarget(
             self.server_address,
             self.group_name,
             self.sample_name,
