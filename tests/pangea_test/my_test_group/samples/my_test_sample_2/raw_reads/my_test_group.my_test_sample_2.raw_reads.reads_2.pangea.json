@@ -1,0 +1,5 @@
+{
+    "__type__": "s3_uri",
+    "endpoint_url": "local",
+    "uri": "tests/data/zymo_pos_cntrl.r2.fq.gz"
+}

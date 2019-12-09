@@ -1,17 +1,14 @@
 
-import luigi
-from pangea_modules import PangeaTarget, PangeaTask
+from pangea_modules import PangeaSampleTarget, PangeaSampleTask
 
 
-class RawReads(PangeaTask):
-    group_name = luigi.Parameter()
-    sample_name = luigi.Parameter()
+class RawReads(PangeaSampleTask):
 
     def name(self):
         return 'raw_reads'
 
     def output(self):
-        read1 = PangeaTarget(
+        read1 = PangeaSampleTarget(
             self.server_address,
             self.group_name,
             self.sample_name,
@@ -20,7 +17,7 @@ class RawReads(PangeaTask):
             local=self.local,
             is_s3=True,
         )
-        read2 = PangeaTarget(
+        read2 = PangeaSampleTarget(
             self.server_address,
             self.group_name,
             self.sample_name,

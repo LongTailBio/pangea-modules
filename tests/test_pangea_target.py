@@ -4,7 +4,7 @@ from unittest import TestCase
 from os import remove
 from os.path import isfile
 
-from pangea_modules import PangeaTarget
+from pangea_modules import PangeaSampleTarget
 
 from .utils import (
     with_server_interface,
@@ -19,7 +19,7 @@ class TestPangeaTarget(TestCase):
 
     @with_server_interface
     def test_get_data_target(self, server_interface):
-        target = PangeaTarget(
+        target = PangeaSampleTarget(
             SERVER_ADDRESS,
             'group_name',
             'sample_name',
@@ -34,7 +34,7 @@ class TestPangeaTarget(TestCase):
     @with_clean_transfer_manager
     @with_server_interface
     def test_get_file_target(self, server_interface):
-        target = PangeaTarget(
+        target = PangeaSampleTarget(
             SERVER_ADDRESS,
             'group_name',
             'sample_name',
